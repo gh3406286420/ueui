@@ -1,0 +1,32 @@
+site_name: Ueui的文档站
+site_url: https://gh3406286420.github.io/ueui
+theme:
+  name: material
+  language: zh
+  palette:
+    - scheme: default
+      primary: black
+      accent: black
+      toggle:
+        icon: material/brightness-7
+        name: 切换到深色模式
+    - scheme: slate
+      primary: black
+      accent: black
+      toggle:
+        icon: material/brightness-4
+        name: 切换到浅色模式
+
+# 👇 左侧菜单栏（你可以自由增删）
+nav:
+  - 首页: index.md
+  - 文章:
+    - 快速开始: txt1.md
+
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
