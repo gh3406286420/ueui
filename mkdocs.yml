@@ -20,9 +20,19 @@ theme:
 # 👇 左侧菜单栏（你可以自由增删）
 nav:
   - 首页: index.md
+  - 关于: deploy-guide.md
   - 文章:
-    - 快速开始: txt1.md
-  - 部署指南: deploy-guide.md
+    - 学习日志:
+        - 抢单接口压测过程: txt1.md
+        - 以目标为导向: txt2.md
+        - 前端部署记录: txt3.md
+        - 压缩Java内存: txt4.md
+        - 传播App经验: txt5.md
+        - 粗浅理解深度学习: txt6.md
+  - 工具: tool.md
+
+
+
 
 
 markdown_extensions:
