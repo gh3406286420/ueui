@@ -21,6 +21,7 @@ theme:
 nav:
   - 首页: index.md
   - 关于: deploy-guide.md
+  - 工具: tool.md
   - 文章:
     - 学习日志:
         - 抢单接口压测过程: txt1.md
@@ -29,7 +30,10 @@ nav:
         - 压缩Java内存: txt4.md
         - 传播App经验: txt5.md
         - 粗浅理解深度学习: txt6.md
-  - 工具: tool.md
+  - 算法:
+      - Java2C++: txt7.md
+      - Java2Python: txt8.md
+      - Java2Go: txt9.md
 
 
 
