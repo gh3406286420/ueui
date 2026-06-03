@@ -28,3 +28,7 @@ _JavaGUI, SQLite_
 - 主要实现了准入密码，以及内容加密与SQLite可视化
 
 SQLite Visual 是可视化 SQLite 数据库管理工具，支持数据库 / 表 / 数据的可视化管理、原生 SQL 执行、密码保护、多主题切换，基于 Java 开发，仅支持 Windows 系统
+
+## CodeBridge-Skill
+
+在cpp, java, python等语言中寻找到通用的算法处理逻辑，并抽象出通用的代码转换方式，以试图实现通过更改“组件”即完成语言转换的效果

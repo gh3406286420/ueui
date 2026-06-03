@@ -31,9 +31,10 @@ nav:
         - 传播App经验: txt5.md
         - 粗浅理解深度学习: txt6.md
   - 算法:
-      - Java2C++: txt7.md
-      - Java2Python: txt8.md
-      - Java2Go: txt9.md
+      - 自制Skill进行代码转化的情况: txt10.md
+      - 像写Java一样写C++: txt7.md
+      - 像写Java/cpp一样写 Python: txt8.md
+      - 像写Python一样写Go-AI生成: txt9.md
 
 
 
