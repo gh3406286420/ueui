@@ -3,6 +3,8 @@ site_url: https://gh3406286420.github.io/ueui
 theme:
   name: material
   language: zh
+  features:
+    - navigation.expand
   palette:
     - scheme: default
       primary: black
