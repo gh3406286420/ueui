@@ -853,7 +853,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        特殊点
+        指针
       
     </span>
   </a>
@@ -864,7 +864,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        容器与集合的对应
+        特殊点
       
     </span>
   </a>
@@ -873,6 +873,17 @@
         
           <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        容器与集合的对应
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         传参与赋值
@@ -899,10 +910,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1 无重复字符的最长子串
+        无重复字符的最长子串
       
     </span>
   </a>
@@ -910,10 +921,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2 找到字符串中所有字母异位词
+        找到字符串中所有字母异位词
       
     </span>
   </a>
@@ -921,10 +932,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3" class="md-nav__link">
+  <a href="#_12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3 合并区间
+        合并区间
       
     </span>
   </a>
@@ -932,7 +943,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_13" class="md-nav__link">
     <span class="md-ellipsis">
       
         两两交换链表中的节点
@@ -1133,7 +1144,7 @@
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        特殊点
+        指针
       
     </span>
   </a>
@@ -1144,7 +1155,7 @@
   <a href="#_7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        容器与集合的对应
+        特殊点
       
     </span>
   </a>
@@ -1153,6 +1164,17 @@
         
           <li class="md-nav__item">
   <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        容器与集合的对应
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         传参与赋值
@@ -1179,10 +1201,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1 无重复字符的最长子串
+        无重复字符的最长子串
       
     </span>
   </a>
@@ -1190,10 +1212,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2 找到字符串中所有字母异位词
+        找到字符串中所有字母异位词
       
     </span>
   </a>
@@ -1201,10 +1223,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3" class="md-nav__link">
+  <a href="#_12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3 合并区间
+        合并区间
       
     </span>
   </a>
@@ -1212,7 +1234,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_13" class="md-nav__link">
     <span class="md-ellipsis">
       
         两两交换链表中的节点
@@ -1412,7 +1434,14 @@ java中 a &gt; b return -1 表明 a大,放前面。a &lt; b return 1 表明 a �
 return -1 就表明 a 放前面，return 1表明放后面，相等则return 0</p>
 <p>Cpp是 return true表明放前面，return false 表明放后面</p>
 <h3 id="_5">其他<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<h4 id="_6">特殊点<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h4>
+<h4 id="_6">指针<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h4>
+<p>Java中默认的变量都是引用，这些引用直接关联的对象也通常是GC的起点</p>
+<p>C++的容器中，存放的也是引用，但C++的引用其实是指针</p>
+<p>所以map<int,TreeNode*>在cpp中合法，Map<Integer,TreeNode>在java中合法</p>
+<p>同时，当我们new TreeNode()时，new返回的结果就是指针本身，且是指向堆中对象的指针</p>
+<p>另外，C++中的空指针为nullptr</p>
+<p>样例参考 <a href="../txt8/#_12">点击跳转</a></p>
+<h4 id="_7">特殊点<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h4>
 <p>Nod nod = mp.get(key);
 if (nod == null) {
 // key 不存在，但 map 没被修改
@@ -1423,7 +1452,7 @@ if (nod == null) {
 <p>for (const auto&amp; p : m) {
 // 直接使用p.first, p.second
 }</p>
-<h4 id="_7">容器与集合的对应<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h4>
+<h4 id="_8">容器与集合的对应<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h4>
 <p>ArrayList, LinkedList, CopyOnWriteArrayList, Vector
 HashSet, TreeSet, ConcurrentHashSet, LinkedHashSet
 ArrayDeque, LinkedList, BlockingQueue</p>
@@ -1452,7 +1481,7 @@ list<int> lst;
 unordered_map<int, string> um;</p>
 <p>// TreeMap → map
 map<int, string> m;</p>
-<h4 id="_8">传参与赋值<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h4>
+<h4 id="_9">传参与赋值<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h4>
 <p><strong>Cpp中的对象，如果 a = b，实际是 对 b对象的深拷贝。而Java中则是传递引用。传参时也是如此</strong></p>
 <p>在java中int[] znums = nums;实际上会把znums引用到nums【int[] znums = nums.clone() 才是深拷贝】，而cpp中，原生数组不是对象，这样不代表深拷贝，只能自己手动实现</p>
 <h4 id="io">IO<a class="headerlink" href="#io" title="Permanent link">&para;</a></h4>
@@ -1460,7 +1489,7 @@ map<int, string> m;</p>
 cout,printf()
 endl, "\n"控制换行
 while(cin &gt;&gt; x)</p>
-<h2 id="1">1 无重复字符的最长子串<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<h2 id="_10">无重复字符的最长子串<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>class Solution {
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    public int lengthOfLongestSubstring(String s) {
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>        Map&lt;Character, Integer&gt; mp = new HashMap&lt;&gt;();
@@ -1495,7 +1524,7 @@ while(cin &gt;&gt; x)</p>
 <a id="__codelineno-7-32" name="__codelineno-7-32" href="#__codelineno-7-32"></a>    }
 <a id="__codelineno-7-33" name="__codelineno-7-33" href="#__codelineno-7-33"></a>};
 </code></pre></div>
-<h2 id="2">2 找到字符串中所有字母异位词<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h2 id="_11">找到字符串中所有字母异位词<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>class Solution {
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    public List&lt;Integer&gt; findAnagrams(String s, String p) {
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>        Map&lt;Character, Integer&gt; mp = new HashMap&lt;&gt;();
@@ -1543,7 +1572,7 @@ while(cin &gt;&gt; x)</p>
 <a id="__codelineno-8-45" name="__codelineno-8-45" href="#__codelineno-8-45"></a>    }
 <a id="__codelineno-8-46" name="__codelineno-8-46" href="#__codelineno-8-46"></a>};
 </code></pre></div>
-<h2 id="3">3 合并区间<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h2 id="_12">合并区间<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>class Solution {
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    public int[][] merge(int[][] intervals) {
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>        Arrays.sort(intervals, (a, b) -&gt; a[0] - b[0]);
@@ -1602,7 +1631,7 @@ while(cin &gt;&gt; x)</p>
 <a id="__codelineno-9-56" name="__codelineno-9-56" href="#__codelineno-9-56"></a>    }
 <a id="__codelineno-9-57" name="__codelineno-9-57" href="#__codelineno-9-57"></a>};
 </code></pre></div>
-<h2 id="_9">两两交换链表中的节点<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_13">两两交换链表中的节点<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>class Solution {
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    public ListNode swapPairs(ListNode head) {
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>        if (head == null) return head;
