@@ -37,3 +37,7 @@ SQLite Visual 是可视化 SQLite 数据库管理工具，支持数据库 / 表 
 ## LC-Hot-100-Exporter-Skill
 
 力扣（leetcode.cn）Hot 100 的题目你做过了，代码都在云端。这个工具帮你一次性把所有已通过的提交拉下来，按题目整理好，保存到桌面。
+
+## Agent-Dissector-Skill
+
+分析其关键点的实现方式以及请求通路

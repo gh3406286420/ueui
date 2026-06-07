@@ -209,6 +209,18 @@ Cpp是 return true表明放前面，return false 表明放后面
 
 
 ### 其他
+#### 指针
+Java中默认的变量都是引用，这些引用直接关联的对象也通常是GC的起点
+
+C++的容器中，存放的也是引用，但C++的引用其实是指针
+
+所以map<int,TreeNode*>在cpp中合法，Map<Integer,TreeNode>在java中合法
+
+同时，当我们new TreeNode()时，new返回的结果就是指针本身，且是指向堆中对象的指针
+
+另外，C++中的空指针为nullptr
+
+样例参考 [点击跳转](txt8.md#_12)
 #### 特殊点
 Nod nod = mp.get(key);
 if (nod == null) {
@@ -278,7 +290,7 @@ cin(空格间隔), getline() 获取一行
 cout,printf()
 endl, "\n"控制换行
 while(cin >> x)
-## 1 无重复字符的最长子串
+## 无重复字符的最长子串
 ```
 class Solution {
     public int lengthOfLongestSubstring(String s) {
@@ -314,7 +326,7 @@ public:
     }
 };
 ```
-## 2 找到字符串中所有字母异位词
+## 找到字符串中所有字母异位词
 ```
 class Solution {
     public List<Integer> findAnagrams(String s, String p) {
@@ -363,7 +375,7 @@ public:
     }
 };
 ```
-## 3 合并区间
+## 合并区间
 ```
 class Solution {
     public int[][] merge(int[][] intervals) {

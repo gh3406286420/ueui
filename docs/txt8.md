@@ -257,7 +257,7 @@ class Solution:
         return [i,j]
 
 ```
-### 2144. 打折购买糖果的最小开销
+### 打折购买糖果的最小开销
 ```java
 class Solution {
     public int minimumCost(int[] cost) {
@@ -327,4 +327,89 @@ class Solution:
                     ans += cost[j]
                 break
         return ans
+```
+### 根据描述创建二叉树
+```java
+class Solution {
+    public TreeNode createBinaryTree(int[][] descriptions) {
+        Map<Integer,TreeNode> mp = new HashMap<>();
+        Set<Integer> st1 = new HashSet<>(), st2 = new HashSet<>();
+        for (int[] cur : descriptions) {
+            st1.add(cur[0]);
+            st2.add(cur[1]);
+            if (!mp.containsKey(cur[0])) {
+                TreeNode par = new TreeNode(cur[0]);
+                mp.put(cur[0], par);
+            }
+            TreeNode nod = mp.get(cur[0]);
+
+            TreeNode cld = mp.containsKey(cur[1]) ? mp.get(cur[1]) : new TreeNode(cur[1]);
+            if (cur[2] == 1) {
+                nod.left = cld;
+            } else nod.right = cld;
+            mp.put(cur[1], cld);
+        }
+        for (Integer x : st1) {
+            if (!st2.contains(x)) {
+                return mp.get(x);
+            }
+        }
+        return null;
+    }
+}
+```
+```cpp
+class Solution {
+public:
+    TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
+        unordered_map<int,TreeNode*> mp;
+        unordered_set<int> st1, st2;
+        for (auto cur : descriptions) {
+            st1.insert(cur[0]);
+            st2.insert(cur[1]);
+            if (mp.count(cur[0]) == 0) {
+                mp[cur[0]] = new TreeNode(cur[0]);
+            }
+            TreeNode* c;
+            if (mp.count(cur[1]) == 0) {
+                c = new TreeNode(cur[1]);
+                mp[cur[1]] = c;
+            } else c = mp[cur[1]];
+
+            TreeNode* par = mp[cur[0]];
+            if (cur[2] == 0) par->right = c;
+            else par->left = c;
+        }
+        for (auto x : st1) {
+            if (st2.count(x) == 0) return mp[x];
+        }
+        return nullptr;
+    }
+};
+```
+```python
+class Solution:
+    def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+        mp = dict()
+        st1 = set()
+        st2 = set()
+        for cur in descriptions:
+            st1.add(cur[0])
+            st2.add(cur[1])
+            if cur[0] not in mp:
+                a = TreeNode(cur[0])
+                mp[cur[0]] = a
+            par = mp[cur[0]]
+            if cur[1] not in mp:
+                b = TreeNode(cur[1])
+                mp[cur[1]] = b
+            cld = mp[cur[1]]
+            if cur[2] == 1:
+                par.left = cld
+            else:
+                par.right = cld
+        for x in st1:
+            if x not in st2:
+                return mp[x]
+        return None
 ```
