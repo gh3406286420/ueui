@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 60" fill="none">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="280" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e8e8e8"/>
+      <stop offset="1" stop-color="#9ca3af"/>
+    </linearGradient>
+  </defs>
+  <!-- U: 真正的半圆弧底部 -->
+  <path d="M22 10 L22 32 A 14 14 0 0 0 50 32 L50 10" stroke="url(#g)" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <!-- E -->
+  <path d="M82 10 L114 10 M82 10 L82 46 M82 28 L106 28 M82 46 L114 46" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- U: 真正的半圆弧底部 -->
+  <path d="M146 10 L146 32 A 14 14 0 0 0 174 32 L174 10" stroke="url(#g)" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <!-- I -->
+  <path d="M206 10 L228 10 M217 10 L217 46 M206 46 L228 46" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

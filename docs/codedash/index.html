@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeDash — AI 原生桌面 IDE</title>
+    <meta name="description" content="CodeDash 是一款 AI 原生桌面 IDE，自研 Agent 引擎、深度代码理解、浏览器自动化、计算机控制 — 全方位赋能开发者。">
+    <meta name="keywords" content="CodeDash, AI IDE, IDE, Agent引擎, 代码理解, 浏览器自动化">
+    <meta name="author" content="CodeDash Team">
+    <meta property="og:title" content="CodeDash — AI 原生桌面 IDE">
+    <meta property="og:description" content="自研 Agent 引擎、深度代码理解、浏览器自动化、计算机控制。">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#9ca3af">
+    <link rel="icon" href="icon-codedash.svg">
+    <style>
+        :root, [data-theme="dark"] {
+            --primary: #9ca3af;
+            --primary-dark: #6b7280;
+            --primary-light: #d1d5db;
+            --bg: #0d1117;
+            --bg-light: #161b22;
+            --card-bg: rgba(22,27,34,0.7);
+            --card-border: rgba(255,255,255,0.1);
+            --text: #e6edf3;
+            --text-light: #8b949e;
+            --text-muted: #6e7681;
+            --border: rgba(255,255,255,0.08);
+            --success: #10b981;
+            --radius: 16px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-lg: 0 15px 40px rgba(255,255,255,0.06);
+            --glow: 0 0 30px rgba(255,255,255,0.12);
+            --nav-bg: rgba(10, 10, 10, 0.85);
+            --nav-bg-scrolled: rgba(10, 10, 10, 0.96);
+            --nav-mobile-bg: rgba(10, 10, 10, 0.97);
+            --nav-shadow: 0 4px 30px rgba(0,0,0,0.4);
+            --nav-text: white;
+            --nav-link-hover: white;
+            --scrollbar-thumb: rgba(255,255,255,0.2);
+            --scrollbar-thumb-hover: rgba(255,255,255,0.35);
+            --surface-subtle: rgba(255,255,255,0.05);
+            --surface-subtle-hover: rgba(255,255,255,0.1);
+            --input-bg: rgba(255,255,255,0.05);
+            --input-text: white;
+            --hero-bg-start: #0a0a0a;
+            --hero-bg-end: #111111;
+            --stat-num: white;
+            --footer-bg: transparent;
+        }
+        [data-theme="light"] {
+            --primary: #9ca3af;
+            --primary-dark: #6b7280;
+            --primary-light: #d1d5db;
+            --bg: #eaecf0;
+            --bg-light: #e0e2e6;
+            --card-bg: rgba(255, 255, 255, 0.96);
+            --card-border: rgba(0,0,0,0.1);
+            --text: #1a1a1a;
+            --text-light: #444444;
+            --text-muted: #888888;
+            --border: rgba(0,0,0,0.08);
+            --success: #10b981;
+            --radius: 16px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 15px 40px rgba(0,0,0,0.08);
+            --glow: 0 0 30px rgba(200,200,200,0.2);
+            --nav-bg: rgba(255,255,255,0.92);
+            --nav-bg-scrolled: rgba(255,255,255,0.98);
+            --nav-mobile-bg: rgba(255,255,255,0.98);
+            --nav-shadow: 0 4px 30px rgba(0,0,0,0.08);
+            --nav-text: #333333;
+            --nav-link-hover: #000000;
+            --scrollbar-thumb: rgba(0,0,0,0.18);
+            --scrollbar-thumb-hover: rgba(0,0,0,0.3);
+            --surface-subtle: rgba(0,0,0,0.04);
+            --surface-subtle-hover: rgba(0,0,0,0.08);
+            --input-bg: rgba(255,255,255,0.9);
+            --input-text: #1a1a1a;
+            --hero-bg-start: #f0f0f2;
+            --hero-bg-end: #e8e8ea;
+            --stat-num: #1a1a1a;
+            --footer-bg: transparent;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        .content-overlay { position: relative; z-index: 1; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+        .navbar {
+            position: sticky; top: 0; z-index: 1000;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 3rem;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .navbar.scrolled {
+            background: var(--nav-bg-scrolled);
+            box-shadow: var(--nav-shadow);
+        }
+        .navbar .logo {
+            display: flex; align-items: center; gap: 0.6rem;
+            font-size: 1.4rem; font-weight: 800;
+            color: var(--nav-text); letter-spacing: -0.5px;
+        }
+        .navbar .logo .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--primary), #9ca3af);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; font-weight: 700; color: var(--nav-text);
+        }
+        .navbar .nav-links {
+            display: flex; gap: 2.5rem;
+            list-style: none; align-items: center;
+        }
+        .navbar .nav-links a {
+            text-decoration: none; color: var(--text-light);
+            font-weight: 500; font-size: 0.9rem;
+            transition: color 0.2s; position: relative;
+        }
+        .navbar .nav-links a::after {
+            content: ''; position: absolute;
+            bottom: -4px; left: 0; width: 0; height: 2px;
+            background: var(--primary); transition: width 0.3s;
+        }
+        .navbar .nav-links a:hover { color: var(--nav-link-hover); }
+        .navbar .nav-links a:hover::after { width: 100%; }
+        .navbar .hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            background: none; border: none; cursor: pointer;
+            padding: 4px;
+        }
+        .navbar .hamburger span {
+            width: 24px; height: 2px;
+            background: var(--nav-text); border-radius: 2px;
+            transition: all 0.3s;
+        }
+        .navbar .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .navbar .hamburger.active span:nth-child(2) { opacity: 0; }
+        .navbar .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .navbar .nav-links .gh-btn {
+            background: var(--surface-subtle);
+            border: 1px solid var(--border);
+            color: var(--text-light);
+            padding: 0.4rem 1rem; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 600;
+            transition: all 0.2s;
+        }
+        .navbar .nav-links .gh-btn:hover {
+            background: var(--surface-subtle-hover);
+            border-color: var(--primary); color: var(--nav-link-hover);
+        }
+        .navbar .nav-links .gh-btn::after { display: none; }
+        .theme-toggle {
+            background: none; border: none;
+            font-size: 1.3rem; cursor: pointer;
+            padding: 0.3rem; line-height: 1;
+            border-radius: 50%; width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s; color: var(--text-light);
+        }
+        .theme-toggle:hover {
+            background: var(--surface-subtle);
+            color: var(--nav-link-hover);
+        }
+        @media (max-width: 900px) {
+            .navbar { padding: 0 1.5rem; }
+            .navbar .nav-links {
+                position: fixed; top: 72px; left: 0; right: 0;
+                flex-direction: column; gap: 0;
+                background: var(--nav-mobile-bg);
+                backdrop-filter: blur(20px);
+                border-bottom: 1px solid var(--border);
+                padding: 1rem 0;
+                transform: translateY(-110%);
+                transition: transform 0.3s ease;
+                overflow: hidden;
+            }
+            .navbar .nav-links.open { transform: translateY(0); }
+            .navbar .nav-links li { width: 100%; text-align: center; padding: 0.8rem 0; }
+            .navbar .hamburger { display: flex; }
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
+        .section-title {
+            text-align: center; font-size: 2.2rem; font-weight: 800;
+            margin-bottom: 0.8rem; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section-subtitle {
+            text-align: center; color: var(--text-muted);
+            font-size: 1.05rem; max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+        .section-divider {
+            width: 60px; height: 3px;
+            background: linear-gradient(90deg, var(--primary), #9ca3af);
+            border-radius: 3px; margin: 1rem auto 2rem;
+        }
+        .hero {
+            text-align: center; padding: 6rem 0 4rem;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: var(--primary-light); font-size: 0.75rem;
+            font-weight: 700; padding: 0.35rem 1rem;
+            border-radius: 20px; letter-spacing: 1px;
+            margin-bottom: 1.5rem; text-transform: uppercase;
+        }
+        .hero h1 {
+            font-size: 4rem; font-weight: 900;
+            letter-spacing: -2px; margin-bottom: 1rem; line-height: 1.1;
+            background: linear-gradient(135deg, #9ca3af 0%, #d1d5db 50%, #6b7280 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.08));
+        }
+        [data-theme="light"] .hero h1 {
+            background: linear-gradient(135deg, #333 0%, #555 50%, #222 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: none;
+        }
+        .hero .subtitle {
+            font-size: 1.2rem; color: var(--text-light);
+            max-width: 650px; margin: 0 auto 2rem; line-height: 1.8;
+        }
+        .hero .stats-row {
+            display: flex; justify-content: center;
+            gap: 3rem; margin-top: 2.5rem; flex-wrap: wrap;
+        }
+        .hero .stat-item { text-align: center; }
+        .hero .stat-item .num {
+            font-size: 2rem; font-weight: 800; color: var(--stat-num);
+            display: block; font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+        .hero .stat-item .label {
+            font-size: 0.8rem; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1px;
+            margin-top: 0.2rem;
+        }
+        .hero .cta-buttons {
+            display: flex; gap: 1rem;
+            justify-content: center; flex-wrap: wrap;
+        }
+        .hero .cta-primary {
+            display: inline-block; padding: 0.9rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary), #6b7280);
+            color: white; border: none; border-radius: 50px;
+            font-size: 1rem; font-weight: 700; cursor: pointer;
+            text-decoration: none; transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(255,255,255,0.4);
+            position: relative;
+        }
+        .hero .cta-primary::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 52px;
+            background: linear-gradient(135deg, var(--primary), #d1d5db, var(--primary-dark));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+            filter: blur(8px);
+        }
+        .hero .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(255,255,255,0.5), 0 0 60px rgba(255,255,255,0.15);
+        }
+        .hero .cta-primary:hover::after {
+            opacity: 0.6;
+        }
+        .hero .cta-secondary {
+            display: inline-block; padding: 0.9rem 2.5rem;
+            background: rgba(255,255,255,0.05); color: var(--text-light);
+            border: 1px solid var(--border); border-radius: 50px;
+            font-size: 1rem; font-weight: 600; cursor: pointer;
+            text-decoration: none; transition: all 0.3s;
+        }
+        .hero .cta-secondary:hover {
+            background: var(--surface-subtle-hover); color: var(--text);
+        }
+        /* === Video Showcase === */
+        .video-section {
+            margin: 4rem auto;
+            max-width: 800px;
+            text-align: center;
+        }
+        .video-section .video-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .video-player {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+        .video-player:hover {
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: var(--shadow-lg), 0 0 60px rgba(255,255,255,0.06);
+        }
+        .video-player .video-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(4px);
+            z-index: 2;
+            transition: opacity 0.4s ease;
+            gap: 1rem;
+        }
+        .video-player .video-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .video-player .video-overlay .play-icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.08);
+        }
+        .video-player .video-overlay:hover .play-icon-circle {
+            transform: scale(1.1);
+            border-color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 0 60px rgba(255,255,255,0.3), 0 0 120px rgba(255,255,255,0.1);
+        }
+        .video-player .video-overlay .overlay-icon {
+            width: 80px;
+            height: 80px;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.25)) brightness(1.2);
+            transition: all 0.3s;
+        }
+        .video-player .video-overlay:hover .overlay-icon {
+            filter: drop-shadow(0 0 50px rgba(255,255,255,0.4)) brightness(1.4);
+            transform: scale(1.05);
+        }
+        .video-player .video-overlay .overlay-text {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.88rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .video-player iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem; margin: 3rem 0;
+        }
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius); padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease; cursor: default;
+            position: relative; overflow: hidden;
+        }
+        .feature-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.4);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.1), 0 0 60px rgba(255,255,255,0.05);
+        }
+        .feature-card .icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; margin-bottom: 1rem;
+            background: rgba(255,255,255,0.1);
+        }
+        .feature-card h3 { font-size: 1.15rem; margin-bottom: 0.6rem; color: var(--text); font-weight: 700; }
+        .feature-card p { color: var(--text-light); font-size: 0.9rem; line-height: 1.7; }
+        .feature-card .tag {
+            display: inline-block; font-size: 0.7rem; font-weight: 600;
+            padding: 0.15rem 0.6rem; border-radius: 12px;
+            margin-top: 0.8rem; background: rgba(255,255,255,0.1);
+            color: var(--primary-light); border: 1px solid rgba(255,255,255,0.2);
+        }
+        .arch-section {
+            margin: 4rem 0; padding: 3rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            backdrop-filter: blur(10px);
+        }
+        .arch-flow {
+            display: flex; align-items: center;
+            justify-content: center; gap: 1rem;
+            flex-wrap: wrap; margin: 2rem 0;
+        }
+        .arch-box {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 12px; padding: 1.2rem 1.5rem;
+            text-align: center; min-width: 150px;
+            transition: all 0.3s;
+        }
+        .arch-box:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-2px);
+        }
+        .arch-box .arch-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .arch-box .arch-name { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+        .arch-box .arch-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; }
+        .arch-arrow { color: var(--text-muted); font-size: 1.2rem; font-weight: 300; }
+        .modes-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem; margin: 2rem 0;
+        }
+        @media (max-width: 900px) { .modes-grid { grid-template-columns: 1fr; } }
+        .mode-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius); padding: 2rem;
+            backdrop-filter: blur(10px); text-align: center;
+            transition: all 0.3s;
+        }
+        .mode-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.15);
+        }
+        .mode-card .mode-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .mode-card h3 { color: var(--text); font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .mode-card p { color: var(--text-light); font-size: 0.85rem; line-height: 1.7; }
+        .mode-card .mode-badge {
+            display: inline-block; margin-top: 1rem;
+            padding: 0.3rem 1rem; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 700;
+        }
+        .mode-card .mode-badge.agent { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+        .mode-card .mode-badge.plan { background: rgba(255,255,255,0.15); color: var(--primary-light); border: 1px solid rgba(255,255,255,0.3); }
+        .mode-card .mode-badge.chain { background: rgba(244,114,182,0.15); color: #d1d5db; border: 1px solid rgba(244,114,182,0.3); }
+        .tech-stack {
+            overflow: hidden;
+            margin: 2rem 0;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        .tech-stack-track {
+            display: flex;
+            gap: 0.8rem;
+            width: max-content;
+            animation: tech-scroll 30s linear infinite;
+        }
+        .tech-stack-track:hover {
+            animation-play-state: paused;
+        }
+        @keyframes tech-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .tech-item {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 20px; padding: 0.5rem 1.2rem;
+            font-size: 0.85rem; color: var(--text-light);
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+        .tech-item:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+            color: var(--text);
+        }
+        }
+        .todo-section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius); padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 3rem; transition: all 0.3s;
+        }
+        .todo-section:hover { border-color: rgba(255,255,255,0.3); }
+        .todo-section h2 {
+            font-size: 1.3rem; margin-bottom: 0.5rem;
+            display: flex; align-items: center; gap: 0.5rem; color: white;
+        }
+        .todo-section .todo-desc { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .todo-section .todo-empty {
+            text-align: center; padding: 2rem; color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .todo-section .todo-empty .empty-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+        .input-group {
+            display: flex; gap: 0.5rem; margin-bottom: 1.2rem;
+        }
+        .input-group input {
+            flex: 1; padding: 0.8rem 1.2rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm); font-size: 0.95rem;
+            outline: none; color: var(--input-text); transition: all 0.2s;
+        }
+        .input-group input::placeholder { color: var(--text-muted); }
+        .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,255,255,0.15); }
+        .input-group button {
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(135deg, var(--primary), #6b7280);
+            color: white; border: none;
+            border-radius: var(--radius-sm); font-size: 0.95rem;
+            font-weight: 600; cursor: pointer; transition: all 0.2s;
+        }
+        .input-group button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255,255,255,0.4);
+        }
+        .input-group button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .todo-list { list-style: none; }
+        .todo-list li {
+            display: flex; align-items: center;
+            justify-content: space-between; padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm); transition: background 0.15s;
+            gap: 0.8rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .todo-list li:last-child { border-bottom: none; }
+        .todo-list li:hover { background: rgba(255,255,255,0.03); }
+        .todo-list li.done span { text-decoration: line-through; color: var(--text-muted); }
+        .todo-list li span { flex: 1; cursor: pointer; color: var(--text); }
+        .todo-list li .del-btn {
+            background: none; border: none; color: #ef4444;
+            cursor: pointer; font-size: 1rem; padding: 0.2rem 0.5rem;
+            border-radius: 6px; opacity: 0.6; transition: all 0.15s;
+        }
+        .todo-list li .del-btn:hover { opacity: 1; background: rgba(239,68,68,0.1); }
+        .todo-list li .check-btn {
+            background: none; border: 1px solid var(--border);
+            width: 22px; height: 22px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center;
+            justify-content: center; color: transparent;
+            transition: all 0.2s; flex-shrink: 0; font-size: 0.7rem;
+        }
+        .todo-list li.done .check-btn {
+            background: var(--success); border-color: var(--success); color: white;
+        }
+        .todo-list li .check-btn:hover { border-color: var(--primary); }
+        .counter {
+            font-size: 0.85rem; color: var(--text-muted);
+            margin-top: 1rem; display: flex;
+            justify-content: space-between; align-items: center;
+        }
+        .counter .clear-btn {
+            background: none; border: none; color: var(--text-muted);
+            font-size: 0.8rem; cursor: pointer; padding: 0.3rem 0.8rem;
+            border-radius: 6px; transition: all 0.2s;
+        }
+        .counter .clear-btn:hover { background: rgba(239,68,68,0.1); color: #ef4444; }
+        .todo-loading {
+            text-align: center; padding: 2rem; color: var(--text-muted);
+        }
+        .loading-dots {
+            display: inline-flex; gap: 4px;
+        }
+        .loading-dots span {
+            width: 6px; height: 6px; background: var(--primary);
+            border-radius: 50%; animation: dotPulse 1.4s infinite;
+        }
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dotPulse {
+            0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+            40% { opacity: 1; transform: scale(1); }
+        }
+        .footer {
+            text-align: center; padding: 3rem 2rem;
+            color: var(--text-muted); font-size: 0.85rem;
+            border-top: 1px solid var(--border); margin-top: 3rem;
+        }
+        .footer .heart { color: #9ca3af; }
+        .footer .footer-links {
+            display: flex; justify-content: center;
+            gap: 2rem; margin-bottom: 1rem;
+        }
+        .footer .footer-links a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.8rem; transition: color 0.2s;
+        }
+        .footer .footer-links a:hover { color: var(--primary-light); }
+        .fade-in {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .api-status {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.75rem; color: var(--text-muted);
+        }
+        .api-status .dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #ef4444;
+        }
+        .api-status .dot.online {
+            background: #10b981;
+            box-shadow: 0 0 8px rgba(16,185,129,0.5);
+        }
+        .back-to-top {
+            position: fixed; bottom: 2rem; right: 2rem;
+            width: 44px; height: 44px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #6b7280);
+            color: white; border: none; font-size: 1.2rem;
+            cursor: pointer; z-index: 999;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+            transition: all 0.3s; opacity: 0; transform: translateY(20px);
+            pointer-events: none;
+        }
+        .back-to-top.show {
+            opacity: 1; transform: translateY(0);
+            pointer-events: auto;
+        }
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255,255,255,0.5);
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero .stats-row { gap: 1.5rem; }
+            .hero .stat-item .num { font-size: 1.5rem; }
+            .container { padding: 2rem 1.2rem; }
+            .section-title { font-size: 1.8rem; }
+            .arch-flow { flex-direction: column; }
+            .arch-arrow { transform: rotate(90deg); }
+            .features-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2rem; }
+            .hero .subtitle { font-size: 1rem; }
+            .container { padding: 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="logo">
+            <span class="logo-icon"><svg width="36" height="36" viewBox="0 0 128 128"><rect x="0" y="0" width="128" height="128" rx="16" fill="#0d1117"/><rect x="0" y="0" width="48" height="28" fill="#f0f0f0"/><rect x="48" y="0" width="40" height="28" fill="#c0c0c0"/><rect x="88" y="0" width="40" height="28" fill="#808080"/><rect x="0" y="20" width="128" height="8" fill="#0d1117"/><text x="64" y="82" font-family="'Courier New',monospace" font-size="44" font-weight="bold" fill="#e6edf3" text-anchor="middle">cd</text><rect x="38" y="102" width="52" height="4" rx="2" fill="#8b949e"/></svg></span>
+            CodeDash
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="菜单">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="./index.html" class="active">首页</a></li>
+            <li><a href="features.html">功能</a></li>
+            <li><a href="docs.html">文档</a></li>
+            <li><a href="log.html">日志</a></li>
+            <li><button class="theme-toggle" id="themeToggle" aria-label="切换主题">暗</button></li>
+            <li><a href="https://github.com/ueuiuiuu" target="_blank" class="gh-btn">GitHub</a></li>
+        </ul>
+    </nav>
+    <div class="content-overlay">
+    <div class="container">
+        <section class="hero" id="hero">
+            <span class="badge">v0.1.0 — 开源 · 免费 · AI 原生</span>
+            <h1>重新定义 AI 编码体验</h1>
+            <p class="subtitle">
+                CodeDash 是一款 <strong>AI 原生桌面 IDE</strong>，自研 Agent 引擎、深度代码理解、
+                浏览器自动化、计算机控制 — 全方位赋能开发者。
+            </p>
+            <div class="cta-buttons">
+                <a href="#features" class="cta-primary">了解更多</a>
+            </div>
+            <div class="stats-row" id="statsRow">
+                <div class="stat-item">
+                    <span class="num" id="statFiles" data-target="128">0</span>
+                    <span class="label">Agent 核心文件</span>
+                </div>
+                <div class="stat-item">
+                    <span class="num" id="statLines" data-target="28500">0</span>
+                    <span class="label">代码行数</span>
+                </div>
+                <div class="stat-item">
+                    <span class="num" id="statTools" data-target="15">0</span>
+                    <span class="label">内置工具</span>
+                </div>
+                <div class="stat-item">
+                    <span class="num" id="statComponents" data-target="42">0</span>
+                    <span class="label">UI 组件</span>
+                </div>
+            </div>
+        </section>
+        <!-- === Video Showcase === -->
+        <section class="video-section" id="videoShowcase">
+            <div class="video-label">产品演示</div>
+            <div class="video-player" id="videoPlayer">
+                <div class="video-overlay" id="videoOverlay">
+                    <img src="icon-codedash.svg" alt="CodeDash" class="overlay-icon" id="overlayIcon">
+                    <div class="play-icon-circle">&#9654;</div>
+                    <div class="overlay-text">点击播放视频介绍</div>
+                </div>
+                <div id="bilibiliContainer" style="width:100%;height:100%;display:none;"></div>
+            </div>
+        </section>
+        <section id="features">
+            <h2 class="section-title">核心功能</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">CodeDash 提供全方位 AI 编码能力，从代码编辑到浏览器自动化，一应俱全。</p>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <h3>自研 Agent 引擎</h3>
+                    <p>零框架依赖，完全自研的 agent-core 引擎。支持 think→act→stream 循环，<strong>Plan</strong>、<strong>Agent</strong>、<strong>Chain</strong> 三种工作模式。</p>
+                    <span class="tag">agent-core</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>深度代码理解</h3>
+                    <p>基于 <strong>tree-sitter</strong> 的代码解析、<strong>bge-small-zh</strong> 语义嵌入、BM25 + 向量搜索双层召回。支持本地离线语义索引，无需联网。</p>
+                    <span class="tag">code-search</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>浏览器自动化</h3>
+                    <p>内置 headless Chromium 控制器，支持 <strong>12+</strong> 浏览器操作工具：导航、点击、输入、滚动、截图、文件上传等，AI 可像人类一样操作网页。</p>
+                    <span class="tag">12+ 工具</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>计算机控制</h3>
+                    <p>基于 <strong>@nut-tree/nut-js</strong>，AI 可直接控制鼠标、键盘、屏幕截图。实现真正的桌面自动化操作。</p>
+                    <span class="tag">computer-use</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>双进程架构</h3>
+                    <p><strong>Electron</strong> 前端 + <strong>agent-core</strong> 后端通过 JSON-RPC 2.0 over stdio 双向通信，一方崩溃不影响另一方，架构优雅解耦。</p>
+                    <span class="tag">架构设计</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>三层记忆系统</h3>
+                    <p>TaskLayer（任务摘要）+ TurnLayer（轮次向量索引）+ Recall（BM25+向量RRF融合排序），AI 可记住长期上下文。</p>
+                    <span class="tag">memory</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>自动化调度</h3>
+                    <p>4 种触发模式：<strong>一次性</strong>、<strong>每日</strong>、<strong>每周</strong>、<strong>自定义间隔</strong>。定时执行 AI 任务。</p>
+                    <span class="tag">automation</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>离线语音识别</h3>
+                    <p>集成 <strong>Vosk</strong> 引擎，支持离线语音转文字。无需云服务，保护隐私。</p>
+                    <span class="tag">speech</span>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>工作流编排</h3>
+                    <p>内置 Workflow 引擎，支持 <strong>并行</strong>、<strong>串行</strong>、<strong>Pipeline</strong>、<strong>Loop</strong> 四种执行模式，复杂任务一键编排。</p>
+                    <span class="tag">workflow</span>
+                </div>
+            </div>
+        </section>
+        <section class="arch-section fade-in" id="architecture">
+            <h2 class="section-title">双进程架构</h2>
+            <div class="section-divider"></div>
+            <p style="text-align:center;color:var(--text-muted);font-size:0.9rem;margin-bottom:2rem;">
+                Electron 前端与 Agent 后端通过 JSON-RPC 2.0 over stdio 双向通信，独立进程互不影响
+            </p>
+            <div class="arch-flow">
+                <div class="arch-box">
+                    <div class="arch-icon"></div>
+                    <div class="arch-name">Electron Shell</div>
+                    <div class="arch-desc">React + Vite UI</div>
+                </div>
+                <div class="arch-arrow">&#11012;</div>
+                <div class="arch-box" style="border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.08);">
+                    <div class="arch-icon"></div>
+                    <div class="arch-name">JSON-RPC 2.0</div>
+                    <div class="arch-desc">stdio 双向通信</div>
+                </div>
+                <div class="arch-arrow">&#11012;</div>
+                <div class="arch-box" style="border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.08);">
+                    <div class="arch-icon"></div>
+                    <div class="arch-name">Agent Core</div>
+                    <div class="arch-desc">自研 Agent 引擎</div>
+                </div>
+            </div>
+        </section>
+        <section id="modes">
+            <h2 class="section-title">三种工作模式</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">根据任务需求灵活选择，从安全只读到全权执行，再到自动化队列。</p>
+            <div class="modes-grid">
+                <div class="mode-card fade-in">
+                    <div class="mode-icon"></div>
+                    <h3>Plan 模式</h3>
+                    <p>AI 仅使用只读工具探索，生成详细的 <code>.plan.md</code> 文件。用户确认后再切换 Agent 执行。</p>
+                    <span class="mode-badge plan">只读安全</span>
+                </div>
+                <div class="mode-card fade-in">
+                    <div class="mode-icon"></div>
+                    <h3>Agent 模式</h3>
+                    <p>AI 拥有完整权限，可读写文件、执行 Shell 命令、控制浏览器和计算机。</p>
+                    <span class="mode-badge agent">全权限</span>
+                </div>
+                <div class="mode-card fade-in">
+                    <div class="mode-icon"></div>
+                    <h3>Chain 模式</h3>
+                    <p>多任务自动队列。Plan → Agent → Plan → Agent 自动循环，直到队列清空。</p>
+                    <span class="mode-badge chain">自动队列</span>
+                </div>
+            </div>
+        </section>
+        <section id="tech">
+            <h2 class="section-title">技术栈</h2>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">从桌面壳到 AI 引擎，全栈自研，零 Agent 框架依赖。</p>
+            <div class="tech-stack">
+                <div class="tech-stack-track">
+                <span class="tech-item">Electron 32</span>
+                <span class="tech-item">React 18</span>
+                <span class="tech-item">TypeScript</span>
+                <span class="tech-item">Vite 5</span>
+                <span class="tech-item">Monaco Editor</span>
+                <span class="tech-item">Tree-sitter</span>
+                <span class="tech-item">Xenova Transformers</span>
+                <span class="tech-item">MiniSearch</span>
+                <span class="tech-item">JSON-RPC 2.0</span>
+                <span class="tech-item">nut.js</span>
+                <span class="tech-item">Vosk</span>
+                <span class="tech-item">KaTeX</span>
+                <span class="tech-item">Xterm.js</span>
+                <span class="tech-item">Node-PTY</span>
+                <span class="tech-item">Simple-Git</span>
+                <span class="tech-item">Three.js</span>
+                <span class="tech-item">Electron 32</span>
+                <span class="tech-item">React 18</span>
+                <span class="tech-item">TypeScript</span>
+                <span class="tech-item">Vite 5</span>
+                <span class="tech-item">Monaco Editor</span>
+                <span class="tech-item">Tree-sitter</span>
+                <span class="tech-item">Xenova Transformers</span>
+                <span class="tech-item">MiniSearch</span>
+                <span class="tech-item">JSON-RPC 2.0</span>
+                <span class="tech-item">nut.js</span>
+                <span class="tech-item">Vosk</span>
+                <span class="tech-item">KaTeX</span>
+                <span class="tech-item">Xterm.js</span>
+                <span class="tech-item">Node-PTY</span>
+                <span class="tech-item">Simple-Git</span>
+                <span class="tech-item">Three.js</span>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="./index.html">首页</a>
+            <a href="features.html">功能</a>
+            <a href="docs.html">文档</a>
+            <a href="log.html">日志</a>
+            <a href="#features">功能特性</a>
+            <a href="#modes">工作模式</a>
+            <a href="#tech">技术栈</a>
+        </div>
+        <p>用 构建 · CodeDash v0.1.0 · 开源 · 免费 · AI 原生桌面 IDE</p>
+    </footer>
+    <button class="back-to-top" id="backToTop" title="回到顶部">&#8593;</button>
+    <script>
+        // === DOM refs ===
+        const backToTop = document.getElementById('backToTop');
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        // === 主题切换 ===
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlEl = document.documentElement;
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme) {
+            htmlEl.setAttribute('data-theme', savedTheme);
+        } else {
+            htmlEl.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+        }
+        themeToggle.textContent = htmlEl.getAttribute('data-theme') === 'dark' ? '暗' : '亮';
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const current = htmlEl.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                htmlEl.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+                themeToggle.textContent = next === 'dark' ? '暗' : '亮';
+            });
+        }
+
+        // === 数字递增动画 ===
+        function animateNumbers() {
+            document.querySelectorAll('.stat-item .num[data-target]').forEach(el => {
+                const target = parseInt(el.getAttribute('data-target'));
+                const duration = 2000;
+                const start = performance.now();
+                function update(now) {
+                    const elapsed = now - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.round(eased * target);
+                    el.textContent = target >= 1000 ? (current >= 1000 ? (current/1000).toFixed(1) + 'k' : current) : current;
+                    if (progress < 1) requestAnimationFrame(update);
+                }
+                requestAnimationFrame(update);
+            });
+        }
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) { animateNumbers(); statsObserver.disconnect(); } });
+        }, { threshold: 0.5 });
+        const statsRow = document.getElementById('statsRow');
+        if (statsRow) statsObserver.observe(statsRow);
+        // === 滚动渐入 ===
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+        // === Navbar 滚动效果 ===
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+            backToTop.classList.toggle('show', window.scrollY > 300);
+        });
+        // === 回到顶部 ===
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        // === 移动端菜单 ===
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            a.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+            });
+        });
+        // === 平滑滚动 ===
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // === Video Player ===
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoOverlay = document.getElementById('videoOverlay');
+        const bilibiliContainer = document.getElementById('bilibiliContainer');
+        let videoLoaded = false;
+
+        videoPlayer.addEventListener('click', () => {
+            if (!videoLoaded) {
+                videoLoaded = true;
+                const iframe = document.createElement('iframe');
+                iframe.src = 'https://player.bilibili.com/player.html?bvid=BV1tjJp6bEvZ&autoplay=1&high_quality=1';
+                iframe.allow = 'autoplay; fullscreen';
+                iframe.allowFullscreen = true;
+                iframe.style.cssText = 'width:100%;height:100%;border:none;';
+                bilibiliContainer.appendChild(iframe);
+                bilibiliContainer.style.display = '';
+                videoOverlay.classList.add('hidden');
+            }
+        });
+
+        console.log('CodeDash website loaded!');
+    </script>
+</body>
+</html>

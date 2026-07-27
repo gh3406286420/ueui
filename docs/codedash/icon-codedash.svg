@@ -1,0 +1,9 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="128" height="128" rx="16" fill="#0d1117"/>
+  <rect x="0" y="0" width="48" height="28" fill="#f0f0f0"/>
+  <rect x="48" y="0" width="40" height="28" fill="#c0c0c0"/>
+  <rect x="88" y="0" width="40" height="28" fill="#808080"/>
+  <rect x="0" y="20" width="128" height="8" fill="#0d1117"/>
+  <text x="64" y="82" font-family="'Courier New',monospace" font-size="44" font-weight="bold" fill="#e6edf3" text-anchor="middle">cd</text>
+  <rect x="38" y="102" width="52" height="4" rx="2" fill="#8b949e"/>
+</svg>

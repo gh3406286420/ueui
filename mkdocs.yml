@@ -1,27 +1,31 @@
-site_name: Ueui的文档站
-site_url: https://gh3406286420.github.io/ueui
+site_name: Ueui Profile
+site_url: https://ueuiuiuu.github.io/ueui
 theme:
   name: material
   language: zh
-  features:
-    - navigation.expand
+  logo: assets/ueui-logo.svg
+  favicon: codedash/icon-codedash.svg
   palette:
-    - scheme: default
-      primary: black
-      accent: black
-      toggle:
-        icon: material/brightness-7
-        name: 切换到深色模式
     - scheme: slate
       primary: black
       accent: black
       toggle:
         icon: material/brightness-4
         name: 切换到浅色模式
+    - scheme: default
+      primary: black
+      accent: black
+      toggle:
+        icon: material/brightness-7
+        name: 切换到深色模式
+
+extra_css:
+  - assets/css/ueui-theme.css
 
 # 👇 左侧菜单栏（你可以自由增删）
 nav:
   - 首页: index.md
+  - 官网: codedash/index.html
   - 关于: deploy-guide.md
   - 工具: tool.md
   - 文章:
