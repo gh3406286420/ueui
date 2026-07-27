@@ -1,0 +1,10 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- —ãF -->
+  <rect x="4" y="4" width="120" height="120" rx="16" fill="none" stroke="currentColor" stroke-width="3" opacity="0.35"/>
+  <!-- ˜r¿ -->
+  <line x1="4" y1="28" x2="124" y2="28" stroke="currentColor" stroke-width="2" opacity="0.2"/>
+  <!-- cd ‡W -->
+  <text x="64" y="82" font-family="'Courier New',monospace" font-size="44" font-weight="600" fill="currentColor" text-anchor="middle" opacity="0.45">cd</text>
+  <!-- •èØ®¿ -->
+  <rect x="34" y="102" width="60" height="4" rx="2" fill="currentColor" opacity="0.2"/>
+</svg>

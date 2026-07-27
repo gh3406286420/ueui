@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日志 — CodeDash · AI 原生桌面 IDE</title>
+    <link rel="icon" href="icon-codedash.svg">
+    <style>
+        :root,[data-theme="dark"]{--primary:#9ca3af;--primary-dark:#6b7280;--primary-light:#d1d5db;--bg:#0d1117;--bg-light:#161b22;--card-bg:rgba(22,27,34,0.7);--card-border:rgba(255,255,255,0.1);--text:#e6edf3;--text-light:#8b949e;--text-muted:#6e7681;--border:rgba(255,255,255,0.08);--radius:16px;--radius-sm:8px;--nav-bg:rgba(10,10,10,0.85);--nav-bg-scrolled:rgba(10,10,10,0.96);--nav-mobile-bg:rgba(10,10,10,0.97);--nav-shadow:0 4px 30px rgba(0,0,0,0.4);--nav-text:white;--nav-link-hover:white;--scrollbar-thumb:rgba(255,255,255,0.2);--scrollbar-thumb-hover:rgba(255,255,255,0.35);--surface-subtle:rgba(255,255,255,0.05);}
+        [data-theme="light"]{--primary:#9ca3af;--bg:#eaecf0;--card-bg:rgba(255,255,255,0.9);--card-border:rgba(0,0,0,0.1);--text:#1a1a1a;--text-light:#444;--text-muted:#888;--border:rgba(0,0,0,0.08);--nav-bg:rgba(255,255,255,0.92);--nav-bg-scrolled:rgba(255,255,255,0.98);--nav-mobile-bg:rgba(255,255,255,0.98);--nav-shadow:0 4px 30px rgba(0,0,0,0.08);--nav-text:#333;--nav-link-hover:#000;--scrollbar-thumb:rgba(0,0,0,0.18);--surface-subtle:rgba(0,0,0,0.04);}
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.7}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:3px}
+        .navbar{position:sticky;top:0;z-index:1000;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 3rem;height:72px;display:flex;align-items:center;justify-content:space-between}
+        .navbar .logo{display:flex;align-items:center;gap:.6rem;font-size:1.4rem;font-weight:800;color:var(--nav-text);text-decoration:none}
+        .navbar .logo .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),#9ca3af);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff}
+        .navbar .nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center}
+        .navbar .nav-links a{text-decoration:none;color:var(--text-light);font-weight:500;font-size:.9rem;transition:color .2s}
+        .navbar .nav-links a:hover{color:var(--nav-link-hover)}
+        .navbar .nav-links a.active{color:var(--nav-link-hover)}
+        .theme-toggle{background:none;border:none;font-size:1rem;cursor:pointer;padding:.3rem;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--text-light);font-family:inherit}
+        .theme-toggle:hover{background:var(--surface-subtle);color:var(--nav-link-hover)}
+        .nav-links .gh-btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:var(--primary-light);padding:.4rem 1rem;border-radius:20px;font-size:.85rem;font-weight:600}
+        .nav-links .gh-btn:hover{background:rgba(255,255,255,0.25);border-color:var(--primary)}
+        @media(max-width:900px){.navbar{padding:0 1.5rem}.navbar .nav-links{position:fixed;top:72px;left:0;right:0;flex-direction:column;background:var(--nav-mobile-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1rem 0;transform:translateY(-110%);transition:transform .3s ease}.navbar .nav-links.open{transform:translateY(0)}.navbar .nav-links li{padding:.8rem 0}.navbar .hamburger{display:flex}}
+        .container{max-width:800px;margin:0 auto;padding:4rem 2rem}
+        h1{font-size:2rem;font-weight:800;letter-spacing:-1px;margin-bottom:2rem}
+        .footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.85rem;border-top:1px solid var(--border);margin-top:3rem}
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <a href="./index.html" class="logo">
+            <span class="logo-icon"><svg width="36" height="36" viewBox="0 0 128 128"><rect x="0" y="0" width="128" height="128" rx="16" fill="#0d1117"/><rect x="0" y="0" width="48" height="28" fill="#f0f0f0"/><rect x="48" y="0" width="40" height="28" fill="#c0c0c0"/><rect x="88" y="0" width="40" height="28" fill="#808080"/><rect x="0" y="20" width="128" height="8" fill="#0d1117"/><text x="64" y="82" font-family="'Courier New',monospace" font-size="44" font-weight="bold" fill="#e6edf3" text-anchor="middle">cd</text><rect x="38" y="102" width="52" height="4" rx="2" fill="#8b949e"/></svg></span>
+            CodeDash
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="菜单"><span></span><span></span><span></span></button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="./index.html">首页</a></li>
+            <li><a href="features.html">功能</a></li>
+            <li><a href="docs.html">文档</a></li>
+            <li><a href="log.html" class="active">日志</a></li>
+            <li><button class="theme-toggle" id="themeToggle" aria-label="切换主题">暗</button></li>
+            <li><a href="https://github.com/ueuiuiuu" target="_blank" class="gh-btn">GitHub</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>日志</h1>
+        <p style="color:var(--text-muted);">暂无内容</p>
+    </div>
+    <footer class="footer">
+        <p>构建 · CodeDash v0.1.0 · 开源 · 免费 · AI 原生桌面 IDE</p>
+    </footer>
+    <script>
+        const t=document.getElementById('themeToggle'),e=document.documentElement;
+        const d=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+        e.setAttribute('data-theme',d);t.textContent=d==='dark'?'暗':'亮';
+        t.addEventListener('click',()=>{const n=e.getAttribute('data-theme')==='dark'?'light':'dark';e.setAttribute('data-theme',n);localStorage.setItem('theme',n);t.textContent=n==='dark'?'暗':'亮'});
+        const h=document.getElementById('hamburger'),n=document.getElementById('navLinks');
+        h.addEventListener('click',()=>{h.classList.toggle('active');n.classList.toggle('open')});
+        n.querySelectorAll('a').forEach(a=>{a.addEventListener('click',()=>{h.classList.remove('active');n.classList.remove('open')})});
+    </script>
+</body>
+</html>
