@@ -25,8 +25,23 @@
         .nav-links .gh-btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:var(--primary-light);padding:.4rem 1rem;border-radius:20px;font-size:.85rem;font-weight:600}
         .nav-links .gh-btn:hover{background:rgba(255,255,255,0.25);border-color:var(--primary)}
         @media(max-width:900px){.navbar{padding:0 1.5rem}.navbar .nav-links{position:fixed;top:72px;left:0;right:0;flex-direction:column;background:var(--nav-mobile-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1rem 0;transform:translateY(-110%);transition:transform .3s ease}.navbar .nav-links.open{transform:translateY(0)}.navbar .nav-links li{padding:.8rem 0}.navbar .hamburger{display:flex}}
-        .container{max-width:800px;margin:0 auto;padding:4rem 2rem}
+        .container{max-width:1100px;margin:0 auto;padding:4rem 2rem}
+        .log-layout{display:flex;gap:2rem;min-height:60vh}
+        .log-sidebar{width:200px;flex-shrink:0;position:sticky;top:92px;height:fit-content}
+        .log-sidebar .sidebar-title{font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);font-weight:700;margin-bottom:1rem}
+        .log-sidebar .log-nav{list-style:none}
+        .log-sidebar .log-nav a{display:block;padding:0.5rem 0.8rem;font-size:0.88rem;color:var(--text-light);text-decoration:none;border-left:2px solid transparent;transition:all 0.2s}
+        .log-sidebar .log-nav a:hover{color:var(--text);border-left-color:var(--text-muted)}
+        .log-sidebar .log-nav a.active{color:var(--text);border-left-color:var(--primary)}
+        .log-content{flex:1;min-width:0}
         h1{font-size:2rem;font-weight:800;letter-spacing:-1px;margin-bottom:2rem}
+        h2{font-size:1.3rem;font-weight:700;margin:2.5rem 0 1rem;color:var(--text)}
+        h3{font-size:1.05rem;font-weight:600;margin:1.5rem 0 0.6rem;color:var(--text-light)}
+        p,li{font-size:0.93rem;line-height:1.8;color:var(--text-light)}
+        ul,ol{margin:0.5rem 0 1rem 1.5rem}
+        li{margin-bottom:0.3rem}
+        .update-date{color:var(--text-muted);font-size:0.8rem;margin-bottom:2rem}
+        @media(max-width:768px){.log-layout{flex-direction:column}.log-sidebar{position:static;width:100%}}
         .footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.85rem;border-top:1px solid var(--border);margin-top:3rem}
     </style>
 </head>
@@ -47,8 +62,52 @@
         </ul>
     </nav>
     <div class="container">
-        <h1>日志</h1>
-        <p style="color:var(--text-muted);">暂无内容</p>
+        <div class="log-layout">
+            <aside class="log-sidebar">
+                <div class="sidebar-title">更新记录</div>
+                <ul class="log-nav">
+                    <li><a href="#v0.1.0" class="active">v0.1.0</a></li>
+                </ul>
+            </aside>
+            <main class="log-content">
+        <h1>更新日志</h1>
+
+        <p class="update-date">v0.1.0 — 2026-07-27</p>
+
+        <section id="v0.1.0">
+        <h2>v0.1.0 首次发布</h2>
+
+        <h3>主要更新</h3>
+        <ol>
+            <li><strong>界面美化</strong> — 整体 UI 重新设计，亮色/暗色双模式，视觉风格更加现代统一</li>
+            <li><strong>语音识别</strong> — 集成 Vosk 离线语音引擎，支持离线语音转文字，无需云服务，保护隐私</li>
+            <li><strong>工具增强</strong> — 新增 Workflow 工作流引擎（支持并行/串行/Pipeline/Loop 四种执行模式）；引入工具权限系统 (RBAC)，精细控制 AI 可调用的工具范围</li>
+            <li><strong>ComputerUse 与浏览器工具</strong> — 基于 nut.js 的桌面自动化，AI 可直接控制鼠标键盘；内置 headless Chromium，支持 12+ 浏览器操作工具</li>
+            <li><strong>提示词增强与覆盖</strong> — 增强系统提示词效果，支持用户自定义提示词覆盖默认行为</li>
+            <li><strong>通知功能</strong> — 任务完成、异常等关键节点系统通知</li>
+            <li><strong>交互优化</strong> — 工具默认收缩与展开、历史提问小窗、会话页面移至右侧而非居中、历史提问分页</li>
+            <li><strong>Fork / Git 功能</strong> — 内置 Git 操作与项目 Fork 能力</li>
+        </ol>
+
+        <h3>细节更新</h3>
+        <ol>
+            <li>左侧文件夹默认不打开，且增加记忆（记住用户折叠/展开偏好）</li>
+            <li>右键菜单"资源管理器/终端打开"位置上移，更方便触达</li>
+            <li>修复 EditFile 写长文本容易出错的问题</li>
+            <li>任意位置右键弹出对话处理窗口，快速发起 AI 交互</li>
+            <li>输入框内容复制优化；输出内容复制按钮位置优化；输入框退出后重新进入保留之前输入内容</li>
+            <li>文件夹内 Ctrl+F 搜索支持</li>
+            <li>工具调用默认不展开，减少视觉干扰</li>
+            <li>添加 CodeDash 品牌图标</li>
+            <li>实现并发能力，多任务可并行执行</li>
+            <li>添加插件模块，支持扩展自定义功能</li>
+            <li>针对 DeepSeek 优化缓存策略，提升响应速度</li>
+            <li>添加英语模式，界面国际化</li>
+            <li>添加 Debug 模式，便于开发者调试</li>
+        </ol>
+        </section>
+            </main>
+        </div>
     </div>
     <footer class="footer">
         <p>构建 · CodeDash v0.1.0 · 开源 · 免费 · AI 原生桌面 IDE</p>
