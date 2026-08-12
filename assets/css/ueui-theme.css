@@ -118,6 +118,102 @@ body, body * {
   top: 50px !important;
 }
 
+/* 移动端抽屉：整屏覆盖（含 header），保持 Material 默认交互 */
+@media screen and (max-width: 76.1875em) {
+  .md-sidebar {
+    top: 0 !important;
+    height: 100% !important;
+  }
+
+  /* 恢复 Material 默认标题栏布局：返回箭头在上、标题文字在下，避免重叠；并做对比色标题栏 */
+  .md-nav--primary .md-nav__title {
+    height: 5.6rem !important;
+    line-height: 2.4rem !important;
+    padding: 3rem .8rem .2rem !important;
+    background: var(--md-default-fg-color) !important;
+    color: var(--md-default-bg-color) !important;
+  }
+
+  /* 暗色模式：标题栏为亮底，浅色 logo 需反色后才可见 */
+  [data-md-color-scheme="slate"] .md-nav--primary .md-nav__button.md-logo img {
+    filter: invert(1) !important;
+  }
+
+  /* === 右侧 TOC 抽屉（Material 9.x 已移除该机制，此处补回） === */
+
+  /* header 右上角目录图标按钮 */
+  .md-header__toc-btn.md-icon svg {
+    fill: currentColor;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  /* 右侧抽屉容器：从右侧滑入 */
+  .md-sidebar--secondary {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    height: 100% !important;
+    width: 15.1rem !important;
+    z-index: 5 !important;
+    background-color: var(--md-default-bg-color) !important;
+    box-shadow: -8px 0 20px rgba(0, 0, 0, 0.3) !important;
+    transform: translateX(105%) !important;
+    transition: transform 0.25s !important;
+  }
+
+  /* 目录按钮 / 抽屉内关闭按钮触发：checkbox 勾选时滑入 */
+  body:has(#__toc:checked) .md-sidebar--secondary {
+    transform: translateX(0) !important;
+  }
+
+  /* 抽屉内容：flex 布局填满剩余空间，内部可滚动 */
+  .md-sidebar--secondary {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .md-sidebar--secondary .md-sidebar__scrollwrap {
+    flex: 1 !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+  }
+  .md-sidebar--secondary .md-sidebar__inner,
+  .md-sidebar--secondary .md-nav--secondary {
+    height: 100% !important;
+  }
+
+  /* 抽屉顶部关闭按钮：使用对比色标题栏（亮色模式为暗底、暗色模式为亮底） */
+  .md-toc-close {
+    display: block;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    background: var(--md-default-fg-color) !important;
+    color: var(--md-default-bg-color) !important;
+    border-bottom: 1px solid var(--md-default-fg-color--lighter) !important;
+  }
+
+  /* 右侧抽屉遮罩：点击空白处关闭 */
+  .md-toc-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: rgba(0, 0, 0, 0.54) !important;
+    z-index: 4 !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s, visibility 0.25s;
+  }
+  body:has(#__toc:checked) .md-toc-overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 .md-nav {
   font-size: 0.75rem !important;
 }
