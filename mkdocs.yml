@@ -24,6 +24,7 @@ extra_css:
 
 extra_javascript:
   - assets/js/mobile-toc.js
+  - assets/js/prev-next.js
 
 # 👇 左侧菜单栏（你可以自由增删）
 nav:
