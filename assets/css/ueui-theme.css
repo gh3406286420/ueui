@@ -120,6 +120,33 @@ body, body * {
 
 /* 移动端抽屉：整屏覆盖（含 header），保持 Material 默认交互 */
 @media screen and (max-width: 76.1875em) {
+    /* 移动端头部：让搜索按钮稳定出现在右上角 */
+    .md-header__inner {
+      padding: 0 0.5rem !important;
+    }
+
+    .md-header__button.md-logo {
+      display: none !important;
+    }
+
+    .md-header__title {
+      font-size: 0.7rem !important;
+      letter-spacing: 0.1em !important;
+    }
+
+    .md-header__button[for="__search"] {
+      display: inline-flex !important;
+    }
+
+      /* 移动端必须取消 header 的 backdrop-filter，
+         否则它会限制内部 fixed 定位的搜索全屏层，
+         导致搜索能打开但结果区域不可见/不响应 */
+      .md-header {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+
   .md-sidebar {
     top: 0 !important;
     height: 100% !important;
@@ -213,6 +240,15 @@ body, body * {
     visibility: visible;
   }
 }
+
+/* 桌面端右侧目录：固定可视高度，避免一次性显示全部目录 */
+@media screen and (min-width: 76.2em) {
+  .md-sidebar--secondary .md-sidebar__scrollwrap {
+    height: calc(100vh - 7rem);
+    max-height: calc(100vh - 7rem);
+  }
+}
+
 
 .md-nav {
   font-size: 0.75rem !important;
@@ -338,6 +374,231 @@ body, body * {
 /* --- TOC sidebar (right) --- */
 /* Restored - see mkdocs.yml features */
 /* .md-sidebar--secondary { display: none !important; } */
+
+/* --- Article prev/next navigation --- */
+.ueui-post-nav {
+  display: flex;
+  align-items: baseline;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--md-default-fg-color--lighter);
+}
+
+.ueui-post-nav__link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  color: var(--md-default-fg-color--light) !important;
+  border-bottom: none !important;
+}
+
+.ueui-post-nav__link:hover,
+.ueui-post-nav__link:focus {
+  color: var(--md-default-fg-color) !important;
+  border-bottom-color: transparent !important;
+}
+
+.ueui-post-nav__link--next {
+  margin-left: auto;
+}
+
+.ueui-post-nav__arrow {
+  font-weight: bold;
+}
+
+/* --- Article reading time --- */
+.ueui-reading-time {
+  margin: -0.5rem 0 1.5rem;
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--light);
+  letter-spacing: 0.05em;
+}
+
+/* --- Homepage hero --- */
+.home-hero {
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+}
+
+.home-hero__logo {
+  width: 180px;
+  max-width: 70%;
+  margin: 0 auto 1.5rem;
+  display: block;
+}
+
+.home-hero h1 {
+  border-bottom: none !important;
+  font-size: 1.2rem !important;
+  letter-spacing: 0.3em !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.home-hero__title {
+  font-size: 1.2rem !important;
+  letter-spacing: 0.3em !important;
+  color: var(--md-default-fg-color) !important;
+  margin-bottom: 0.5rem !important;
+}
+
+
+.home-hero__desc {
+  color: var(--md-default-fg-color--light) !important;
+  margin-bottom: 2rem !important;
+}
+
+.home-hero__links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.home-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid var(--md-default-fg-color--lighter) !important;
+  border-radius: 8px !important;
+  background: var(--md-default-bg-color) !important;
+  color: var(--md-default-fg-color--light) !important;
+  border-bottom: 1px solid var(--md-default-fg-color--lighter) !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--md-default-fg-color--light) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.home-card__label {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.home-card__value {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color) !important;
+}
+
+/* --- Tool cards --- */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.2rem;
+  border: 1px solid var(--md-default-fg-color--lighter) !important;
+  border-radius: 10px !important;
+  background: var(--md-default-bg-color) !important;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tool-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--md-default-fg-color--light) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+}
+
+.tool-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lighter);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.tool-card__head h2 {
+  margin: 0 !important;
+  border-bottom: none !important;
+  font-size: 0.9rem !important;
+}
+
+.tool-card__tag {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--md-default-fg-color--lighter) !important;
+  border-radius: 999px;
+  color: var(--md-default-fg-color--light) !important;
+  white-space: nowrap;
+}
+
+.tool-card pre {
+  font-size: 0.7rem !important;
+  padding: 0.8rem !important;
+  margin: 0.25rem 0 !important;
+  overflow-x: auto;
+}
+
+/* --- Prev/next hover animation --- */
+.ueui-post-nav__arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.ueui-post-nav__link--prev:hover .ueui-post-nav__arrow {
+  transform: translateX(-3px);
+}
+
+.ueui-post-nav__link--next:hover .ueui-post-nav__arrow {
+  transform: translateX(3px);
+}
+
+/* --- Selection & focus --- */
+::selection {
+  background: var(--md-default-fg-color--light) !important;
+  color: var(--md-default-bg-color) !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--md-typeset-a-color) !important;
+  outline-offset: 2px;
+}
+
+/* --- Page fade-in --- */
+.md-content__inner {
+  animation: ueui-fade-in 0.25s ease-out both;
+}
+
+@keyframes ueui-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-content__inner,
+  .tool-card,
+  .home-card,
+  .ueui-post-nav__arrow {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 
 /* --- Footer --- */
 .md-footer {

@@ -691,6 +691,88 @@
             .hero .subtitle { font-size: 1rem; }
             .container { padding: 1.5rem 1rem; }
         }
+        /* === 移动端与整体细节增强 === */
+        html { -webkit-text-size-adjust: 100%; }
+        img { max-width: 100%; height: auto; }
+        section { scroll-margin-top: 90px; }
+        button, a { -webkit-tap-highlight-color: transparent; }
+
+        @media (max-width: 900px) {
+            .navbar { height: 64px; padding: 0 1rem; }
+            .navbar .nav-links { top: 64px; padding: 0.8rem 1rem 1.2rem; max-height: calc(100vh - 64px); overflow-y: auto; }
+            .navbar .nav-links li { padding: 0.7rem 0; }
+            .navbar .nav-links { align-items: stretch; }
+            .navbar .nav-links li { text-align: left; padding: 0.25rem 0; }
+            .navbar .nav-links a,
+            .navbar .nav-links .theme-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                width: 100%;
+                padding: 0.8rem 1rem;
+                border-radius: 8px;
+                font-size: 0.95rem;
+            }
+            .navbar .nav-links a.active {
+                background: var(--surface-subtle);
+                color: var(--nav-link-hover);
+            }
+            .navbar .nav-links .theme-toggle { height: auto; }
+            .navbar .nav-links .gh-btn {
+                justify-content: center;
+                margin: 0.25rem 0 0.5rem;
+                padding: 0.7rem 1rem;
+                border-radius: 8px;
+            }
+
+            .navbar .logo { font-size: 1.2rem; }
+            .navbar .logo .logo-icon { width: 32px; height: 32px; }
+            .hero { padding: 4rem 0 2.5rem; }
+            .hero h1 { font-size: 2.4rem; letter-spacing: -1px; }
+            .hero .subtitle { font-size: 1.05rem; }
+            .section-title { font-size: 1.8rem; }
+            .section-subtitle { font-size: 0.95rem; margin-bottom: 2rem; }
+            .container { padding: 2rem 1.2rem; }
+            .features-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .feature-card { padding: 1.5rem; }
+            .arch-section { padding: 2rem 1.2rem; margin: 3rem 0; }
+            .modes-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .mode-card { padding: 1.5rem; }
+            .todo-section { padding: 1.5rem; }
+            .input-group { flex-direction: column; }
+            .input-group button { width: 100%; }
+            .footer-links { flex-wrap: wrap; gap: 1rem 1.5rem; }
+            .back-to-top { right: 1rem; bottom: 1rem; width: 40px; height: 40px; }
+        }
+
+        @media (max-width: 480px) {
+            .navbar { padding: 0 0.75rem; }
+            .navbar .logo { font-size: 1.05rem; }
+            .hero { padding: 3rem 0 2rem; }
+            .hero h1 { font-size: 1.9rem; }
+            .hero .subtitle { font-size: 0.95rem; }
+            .hero .cta-buttons { flex-direction: column; align-items: stretch; }
+            .hero .cta-primary,
+            .hero .cta-secondary { text-align: center; }
+            .hero .stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+            .hero .stat-item .num { font-size: 1.4rem; }
+            .hero .stat-item .label { font-size: 0.7rem; }
+            .section-title { font-size: 1.5rem; }
+            .section-subtitle { font-size: 0.88rem; }
+            .container { padding: 1.25rem 0.9rem; }
+            .arch-arrow { margin: 0.25rem 0; }
+            .footer { padding: 2rem 1rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -910,7 +992,7 @@
             <a href="#modes">工作模式</a>
             <a href="#tech">技术栈</a>
         </div>
-        <p>用 构建 · CodeDash v0.1.0 · 开源 · 免费 · AI 原生桌面 IDE</p>
+        <p>用 <span class="heart">❤</span> 构建 · CodeDash v0.1.0 · 开源 · 免费 · AI 原生桌面 IDE</p>
     </footer>
     <button class="back-to-top" id="backToTop" title="回到顶部">&#8593;</button>
     <script>

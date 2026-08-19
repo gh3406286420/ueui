@@ -10,7 +10,10 @@
 
   ready(function () {
     // 仅在移动端视口注入
-    if (!window.matchMedia('(max-width: 76.1875em)').matches) return;
+    var isMobile = window.matchMedia('(max-width: 76.1875em)').matches;
+
+    // ============ 移动端抽屉交互 ============
+    if (isMobile) {
 
     var drawerInput = document.getElementById('__drawer');
     var tocInput = document.getElementById('__toc');
@@ -64,5 +67,79 @@
         });
       });
     }
+
+    }
+
+    // ============ 目录当前项平滑居中（桌面 + 移动） ============
+    setupTocCentering(tocInput);
+
+    // ============ 移动端搜索：打开后自动聚焦输入框 ============
+    var searchToggle = document.getElementById('__search');
+    var searchInput = document.querySelector('.md-search__input');
+    if (searchToggle && searchInput) {
+      searchToggle.addEventListener('change', function () {
+        if (searchToggle.checked) {
+          setTimeout(function () {
+            searchInput.focus();
+          }, 100);
+        } else {
+          searchInput.blur();
+        }
+      });
+    }
   });
+
+  function setupTocCentering(tocInput) {
+    var sidebar = document.querySelector('.md-sidebar--secondary');
+    if (!sidebar) return;
+
+    var scrollwrap = sidebar.querySelector('.md-sidebar__scrollwrap');
+    var tocNav = sidebar.querySelector('.md-nav--secondary');
+    if (!scrollwrap || !tocNav) return;
+
+    var ticking = false;
+    var lastActive = null;
+
+    function update(force) {
+      ticking = false;
+      var active = tocNav.querySelector('.md-nav__link--active');
+      if (!active) return;
+
+      if (!force && active === lastActive) return;
+      lastActive = active;
+
+      var wrapRect = scrollwrap.getBoundingClientRect();
+      var linkRect = active.getBoundingClientRect();
+      var target = scrollwrap.scrollTop +
+        (linkRect.top - wrapRect.top) -
+        wrapRect.height / 2 +
+        linkRect.height / 2;
+
+      target = Math.max(0, Math.min(target, scrollwrap.scrollHeight - wrapRect.height));
+      scrollwrap.scrollTo({ top: target, behavior: 'smooth' });
+    }
+
+    function requestUpdate() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(function () {
+          update(false);
+        });
+      }
+    }
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    if (tocInput) {
+      tocInput.addEventListener('change', function () {
+        if (tocInput.checked) {
+          lastActive = null;
+          update(true);
+        }
+      });
+    }
+
+    update(true);
+  }
 })();

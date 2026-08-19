@@ -840,13 +840,25 @@
 
 
 
-  <h1>首页</h1>
-
-<p><img src="assets/ueui-logo.svg" alt="ueui" width="280" style="display:block;margin:0 auto 1rem;"></p>
-<hr />
-<p><code>email</code> — ueuiuiuu@163.com</p>
-<p><code>github</code> — <a href="https://github.com/ueuiuiuu">点击前往</a></p>
-<p><code>share</code> — 分享个人工具</p>
+<div class="home-hero">
+  <img src="assets/ueui-logo.svg" alt="UEUI" class="home-hero__logo">
+  <h1>Ueui Profile</h1>
+  <p class="home-hero__desc">个人主页 · 文章 · 工具分享</p>
+  <div class="home-hero__links">
+    <a class="home-card" href="mailto:ueuiuiuu@163.com">
+      <span class="home-card__label">email</span>
+      <span class="home-card__value">ueuiuiuu@163.com</span>
+    </a>
+    <a class="home-card" href="https://github.com/ueuiuiuu" target="_blank" rel="noopener">
+      <span class="home-card__label">github</span>
+      <span class="home-card__value">点击前往</span>
+    </a>
+    <a class="home-card" href="tool/">
+      <span class="home-card__label">share</span>
+      <span class="home-card__value">分享个人工具</span>
+    </a>
+  </div>
+</div>
 
 
 
@@ -902,6 +914,8 @@
       <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
       
         <script src="assets/js/mobile-toc.js"></script>
+      
+        <script src="assets/js/prev-next.js"></script>
       
     
   </body>
