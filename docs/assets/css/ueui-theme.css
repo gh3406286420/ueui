@@ -78,6 +78,102 @@ body, body * {
   width: auto !important;
 }
 
+/* 亮色模式下，UEUI logo 需要压暗，否则在浅色背景上看不清 */
+[data-md-color-scheme="default"] .md-header__button.md-logo img,
+[data-md-color-scheme="default"] .md-nav__button.md-logo img,
+[data-md-color-scheme="default"] .home-hero__logo {
+  filter: brightness(0.6) !important;
+}
+
+
+/* --- Water grid background --- */
+.water-grid-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.md-container {
+  /* 不能创建新的 stacking context，否则移动端抽屉会被 overlay 盖住 */
+  position: relative;
+  z-index: auto;
+}
+
+.md-header {
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .water-grid-canvas {
+    display: none !important;
+  }
+}
+
+/* --- Theme circular reveal (View Transitions) --- */
+::view-transition-old(root) {
+  animation: none;
+}
+
+::view-transition-new(root) {
+  clip-path: circle(0% at var(--reveal-x, 50%) var(--reveal-y, 50%));
+  animation: theme-reveal-circle 0.6s ease-out forwards;
+}
+
+@keyframes theme-reveal-circle {
+  to {
+    clip-path: circle(200% at var(--reveal-x, 50%) var(--reveal-y, 50%));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+/* --- 桌面端毛玻璃分层：侧边栏与内容区与背景区分 --- */
+@media screen and (min-width: 76.2em) {
+  .md-sidebar--primary,
+  .md-sidebar--secondary {
+    z-index: 1;
+  }
+
+  .md-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  [data-md-color-scheme="slate"] .md-sidebar__inner {
+    background: rgba(10, 10, 10, 0.15) !important;
+  }
+
+  [data-md-color-scheme="default"] .md-sidebar__inner {
+    background: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .md-sidebar__inner {
+    backdrop-filter: blur(5px) saturate(110%) !important;
+    -webkit-backdrop-filter: blur(5px) saturate(110%) !important;
+    border: 1px solid var(--md-default-fg-color--lighter) !important;
+    border-radius: 12px !important;
+    padding: 0.5rem !important;
+  }
+
+  .md-content__inner {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+}
+
+
+
 /* --- Typography --- */
 .md-typeset {
   font-size: 0.8rem !important;
@@ -118,6 +214,75 @@ body, body * {
   top: 50px !important;
 }
 
+/* 侧边栏滚动条调细（提高优先级，覆盖 Material 默认滚动条） */
+.md-sidebar .md-sidebar__scrollwrap,
+.md-sidebar .md-sidebar__inner,
+.md-sidebar .md-nav--primary {
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--md-default-fg-color--light) transparent !important;
+}
+
+.md-sidebar .md-sidebar__scrollwrap::-webkit-scrollbar,
+.md-sidebar .md-sidebar__inner::-webkit-scrollbar,
+.md-sidebar .md-nav--primary::-webkit-scrollbar {
+  width: 3px !important;
+  height: 3px !important;
+}
+
+.md-sidebar .md-sidebar__scrollwrap::-webkit-scrollbar-track,
+.md-sidebar .md-sidebar__inner::-webkit-scrollbar-track,
+.md-sidebar .md-nav--primary::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.md-sidebar .md-sidebar__scrollwrap::-webkit-scrollbar-thumb,
+.md-sidebar .md-sidebar__inner::-webkit-scrollbar-thumb,
+.md-sidebar .md-nav--primary::-webkit-scrollbar-thumb {
+  background: var(--md-default-fg-color--light) !important;
+  border-radius: 3px !important;
+}
+
+.md-sidebar .md-sidebar__scrollwrap::-webkit-scrollbar-thumb:hover,
+.md-sidebar .md-sidebar__inner::-webkit-scrollbar-thumb:hover,
+.md-sidebar .md-nav--primary::-webkit-scrollbar-thumb:hover {
+  background: var(--md-default-fg-color--light) !important;
+}
+
+/* 兜底：只要滚动条在侧边栏内部，都强制调细 */
+.md-sidebar * {
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--md-default-fg-color--light) transparent !important;
+}
+
+.md-sidebar *::-webkit-scrollbar {
+  width: 3px !important;
+  height: 3px !important;
+}
+
+.md-sidebar *::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.md-sidebar *::-webkit-scrollbar-thumb,
+.md-sidebar *::-webkit-scrollbar-thumb:hover {
+  background: var(--md-default-fg-color--light) !important;
+  border-radius: 3px !important;
+}
+
+
+
+/* 桌面端左侧导航标题不要固定悬浮，避免遮挡滚动内容 */
+@media screen and (min-width: 76.2em) {
+  .md-nav--primary > .md-nav__title {
+    position: static !important;
+    background: transparent !important;
+    color: var(--md-default-fg-color--light) !important;
+    height: auto !important;
+    padding: 0.6rem 0.8rem !important;
+  }
+}
+
+
 /* 移动端抽屉：整屏覆盖（含 header），保持 Material 默认交互 */
 @media screen and (max-width: 76.1875em) {
     /* 移动端头部：让搜索按钮稳定出现在右上角 */
@@ -152,6 +317,75 @@ body, body * {
     height: 100% !important;
   }
 
+    /* 移动端左侧抽屉背景完整覆盖，避免亮色模式下右侧出现白条 */
+    .md-sidebar--primary {
+      background-color: var(--md-default-bg-color) !important;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
+    }
+      /* 让抽屉内部元素也使用同一背景，避免右侧露出白色内层 */
+      .md-sidebar--primary .md-sidebar__scrollwrap,
+      .md-sidebar--primary .md-nav--primary {
+        background-color: var(--md-default-bg-color) !important;
+      }
+
+      /* 如果 .md-sidebar__inner 自带白色背景，这里直接去掉 */
+      .md-sidebar--primary .md-sidebar__inner {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
+
+    /* 让抽屉宽度更符合移动端，并确保右侧遮罩变暗而不是白条 */
+    .md-sidebar--primary {
+      width: 82vw !important;
+      max-width: 320px !important;
+    }
+
+    .md-overlay {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+
+      #__drawer:checked ~ .md-overlay {
+      opacity: 1 !important;
+        pointer-events: auto !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* 关闭状态下彻底隐藏侧边栏，避免边缘露出白条 */
+    .md-sidebar--primary,
+    .md-sidebar--secondary {
+      visibility: hidden;
+      transition: transform 0.25s ease, visibility 0.25s ease;
+    }
+
+    body:has(#__drawer:checked) .md-sidebar--primary,
+    body:has(#__toc:checked) .md-sidebar--secondary {
+      visibility: visible;
+    }
+      /* 更强的关闭隐藏，防止关闭后残留 */
+      .md-sidebar--primary,
+      .md-sidebar--secondary {
+        visibility: hidden !important;
+          opacity: 0 !important;
+        pointer-events: none;
+        transition: transform 0.25s ease, opacity 0.25s ease, visibility 0s linear 0.25s;
+      }
+
+      body:has(#__drawer:checked) .md-sidebar--primary,
+      body:has(#__toc:checked) .md-sidebar--secondary {
+        visibility: visible !important;
+          opacity: 1 !important;
+        pointer-events: auto;
+        transition: transform 0.25s ease, opacity 0.25s ease, visibility 0s;
+      }
+
+
+
+
+
   /* 恢复 Material 默认标题栏布局：返回箭头在上、标题文字在下，避免重叠；并做对比色标题栏 */
   .md-nav--primary .md-nav__title {
     height: 5.6rem !important;
@@ -165,6 +399,61 @@ body, body * {
   [data-md-color-scheme="slate"] .md-nav--primary .md-nav__button.md-logo img {
     filter: invert(1) !important;
   }
+
+    /* 修复移动端进入子目录后，上一级菜单仍残留的问题 */
+    .md-nav--primary {
+        position: relative;
+      overflow: hidden;
+    }
+    .md-nav--primary .md-nav__item--nested > .md-nav {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 2;
+        background: var(--md-default-bg-color) !important;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      visibility: hidden;
+    }
+    .md-nav--primary .md-nav__item--nested > .md-nav__toggle:checked ~ .md-nav {
+      transform: translateX(0);
+      visibility: visible;
+    }
+      /* 直接隐藏上一级菜单中未展开的其他顶层项，避免视觉残留 */
+      .md-nav--primary > .md-nav__list:has(> .md-nav__item > .md-nav__toggle:checked) > .md-nav__item:not(:has(> .md-nav__toggle:checked)) {
+        visibility: hidden;
+      }
+
+      /* 覆盖上面的滑动子菜单逻辑：移动端改为内联展开 */
+      .md-nav--primary {
+        overflow: visible;
+      }
+      .md-nav--primary .md-nav__item--nested > .md-nav {
+        position: static;
+        height: 0;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transform: none;
+        background: transparent;
+        transition: height 0.25s ease, opacity 0.25s ease;
+      }
+      .md-nav--primary .md-nav__item--nested > .md-nav__toggle:checked ~ .md-nav {
+        height: auto;
+        opacity: 1;
+        visibility: visible;
+      }
+      .md-nav--primary .md-nav__item--nested > .md-nav > .md-nav__title {
+        display: none;
+      }
+      .md-nav--primary > .md-nav__list:has(> .md-nav__item > .md-nav__toggle:checked) > .md-nav__item:not(:has(> .md-nav__toggle:checked)) {
+        visibility: visible;
+      }
+
+
+
 
   /* === 右侧 TOC 抽屉（Material 9.x 已移除该机制，此处补回） === */
 
@@ -259,6 +548,8 @@ body, body * {
 }
 
 .md-nav__link {
+  position: relative;
+  overflow: hidden;
   color: var(--md-default-fg-color--light) !important;
   transition: color 0.3s ease !important;
   margin: 0 !important;
@@ -266,10 +557,32 @@ body, body * {
   border-radius: 4px !important;
 }
 
+.md-nav__link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--md-default-fg-color--lighter), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.md-nav__link:hover::before,
+.md-nav__link:focus::before {
+  transform: translateX(0);
+}
+
+.md-nav__link > * {
+  position: relative;
+  z-index: 1;
+}
+
 .md-nav__link:hover,
 .md-nav__link:focus {
   color: var(--md-default-fg-color) !important;
-  background: var(--md-default-fg-color--lighter) !important;
 }
 
 .md-nav__link--active {
@@ -458,24 +771,73 @@ body, body * {
 }
 
 .home-card {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 0.8rem 1.2rem;
+  padding: 0.9rem 1.2rem;
   border: 1px solid var(--md-default-fg-color--lighter) !important;
-  border-radius: 8px !important;
-  background: var(--md-default-bg-color) !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
   color: var(--md-default-fg-color--light) !important;
-  border-bottom: 1px solid var(--md-default-fg-color--lighter) !important;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(10px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(120%) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
+
+[data-md-color-scheme="slate"] .home-card {
+  background: rgba(255, 255, 255, 0.025) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+[data-md-color-scheme="default"] .home-card {
+  background: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.home-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--md-default-fg-color--light), transparent);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.home-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--md-default-fg-color--lighter), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.home-card:hover::after {
+  transform: translateX(0);
+}
+
+.home-card > * {
+  position: relative;
+  z-index: 1;
+}
+
 
 .home-card:hover {
   transform: translateY(-2px);
   border-color: var(--md-default-fg-color--light) !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .home-card__label {
@@ -499,20 +861,47 @@ body, body * {
 }
 
 .tool-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding: 1.2rem;
   border: 1px solid var(--md-default-fg-color--lighter) !important;
-  border-radius: 10px !important;
-  background: var(--md-default-bg-color) !important;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(10px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(120%) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+[data-md-color-scheme="slate"] .tool-card {
+  background: rgba(255, 255, 255, 0.025) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+[data-md-color-scheme="default"] .tool-card {
+  background: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--md-default-fg-color--light), transparent);
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .tool-card:hover {
   transform: translateY(-3px);
   border-color: var(--md-default-fg-color--light) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .tool-card__head {
@@ -547,6 +936,85 @@ body, body * {
   margin: 0.25rem 0 !important;
   overflow-x: auto;
 }
+
+/* --- Tool Coverflow --- */
+.tool-coverflow {
+  max-width: 1000px;
+  margin: 2rem auto 1rem;
+  perspective: 1200px;
+}
+
+.tool-coverflow__viewport {
+  position: relative;
+  height: 480px;
+  cursor: grab;
+  outline: none;
+}
+
+.tool-coverflow__viewport:active {
+  cursor: grabbing;
+}
+
+.tool-coverflow__track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.tool-coverflow .coverflow-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(420px, 82%);
+  margin: 0;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s linear, opacity 0.15s linear;
+  will-change: transform, opacity;
+}
+
+.tool-coverflow .coverflow-card {
+  background: rgba(22, 27, 34, 0.92) !important;
+  border-color: var(--md-default-fg-color--lighter) !important;
+}
+
+[data-md-color-scheme="default"] .tool-coverflow .coverflow-card {
+  background: rgba(255, 255, 255, 0.92) !important;
+}
+
+
+.tool-coverflow .coverflow-card.is-active {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.tool-coverflow .coverflow-card.is-adjacent {
+  filter: brightness(0.85);
+}
+
+.tool-coverflow {
+  position: relative;
+}
+
+.tool-coverflow__viewport {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .tool-coverflow__viewport {
+    height: 100vh;
+  }
+
+  .tool-coverflow .coverflow-card {
+    width: 86%;
+  }
+}
+
 
 /* --- Prev/next hover animation --- */
 .ueui-post-nav__arrow {
