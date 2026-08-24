@@ -6,13 +6,19 @@
 
 > 后面发现是所用MQ版本有内存泄漏的问题。暂时使用 定时任务 定时重启 MQ 来应对
 > 考虑到项目本身仅仅只是使用 MQ 做解耦，对持久性要求有限，且受限于内存大小，发觉没必要为此开 MQ，于是将其换为 本地MQ，这也是 MiniRocketMQ 的由来
-> 随后问题得以解决，且大幅降低了内存消耗  *图片在底部*
+> 随后问题得以解决，且大幅降低了内存消耗
+
+<img src="../assets/images/txt4/内存-时间图.jpg" alt="内存-时间图" style="max-width:100%;height:auto;max-height:480px;border-radius:8px;">
 
 ### 后来为了把 2 个 Jar 压到一起运行
 同时想保持 1G 内存以内，以降低部署成本 (最后降了一半，低峰时，可以降更多)
 
 只好去研究怎么调参，最直接关联的参数即 -Xmx -Xms，限制了 Jar 运行时的最大堆内存的大小以及初始化时的大小。
-利用 jdk自带工具 jconsole 在不同参数下内存占用作用后，觉得是可行之路 *(对比图片在底部)*
+利用 jdk自带工具 jconsole 在不同参数下内存占用作用后，觉得是可行之路
+
+<img src="../assets/images/txt4/不加限制.png" alt="不加限制" style="max-width:100%;height:auto;max-height:480px;border-radius:8px;">
+
+<img src="../assets/images/txt4/加限制.png" alt="加限制" style="max-width:100%;height:auto;max-height:480px;border-radius:8px;">
 
 > 此处的 **堆内存** 划重点，最初以为是限制总内存大小，当发现效果不如预期时，误以为是因为 设置内存过小，导致GC频繁且回收不过来所致，于是曾尝试过几次又适度调大，让其有发挥的空间，期望能实际占用小。最终发现不如不带参数的效果好。回到了原地
 > 本质上就是因为 没理解 -Xmx -Xms 的准确含义，后面通过更细致的对**非堆**区域的限制，来真正的控制总内存大小
@@ -20,6 +26,9 @@
 > 在经过一次过于激进的调试后，在避开了 因为分配的内存过小导致初始化的一些对象无法完全生成导致无法启动的错误之后，得到了符合要求的参数配置
 > -Xms64M -Xmx80M -XX:MetaspaceSize=32M -XX:MaxMetaspaceSize=64M -XX:MaxDirectMemorySize=24M -XX:ReservedCodeCacheSize=24M -Xss256K -XX:+UseContainerSupport -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -XX:+DisableExplicitGC -XX:+UseCompressedOops -XX:+UseCompressedClassPointers
 > 除了限定 堆，元空间，栈，以及对 JIT 编译的代码的缓存 的大小做了限制之外。采用 SerialGC，也是因为 G1 本身会消耗更大的内存 (尽管 jdk17下 默认就是 G1)，且 G1 在多线程更有优势，而该服务器最初使用的是 1核，现在也才 2核 而已。最后还启用了压缩指针
+
+<img src="../assets/images/txt4/成功参数.png" alt="成功参数" style="max-width:100%;height:auto;max-height:480px;border-radius:8px;">
+
 
 ### 误入歧途
 
@@ -29,6 +38,9 @@
 - 继续增大内存，减少垃圾回收，最终却**无济于事**
 
 > 最后，发现是因为 使用 mariadb 时，权限与真正 mysql 不一致导致了后端无法获得数据 (然而命令行使用 java -jar 则不会出现这个问题，所以难以发现)。于是又把内存改回去了，毕竟留有一定的 缓冲区间，目前内存利用率 长时间保持 75% 上下
+
+
+
 
 **那么，代价是什么？**
 最直观的体现：加载页面并不快。然而，对于一个后端学习者而言，或许更高的内存的价格并非完全不可接受，但是，有钱拿又能锻炼自己的机会，为什么要放过呢？

@@ -2,6 +2,9 @@
 
 <br>
 
+<img src="../assets/images/txt1/压测图片.png" alt="压测图片" style="max-width:100%;height:auto;max-height:480px;border-radius:8px;">
+
+
 ## 背景
 
 <br>
