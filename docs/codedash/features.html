@@ -255,6 +255,24 @@
             .page-hero h1 { font-size: 1.8rem; }
             .container { padding: 1.5rem 1rem; }
         }
+        /* === 移动端导航优化 === */
+        @media (max-width: 900px) {
+            .navbar { height: 64px; padding: 0 1rem; }
+            .navbar .nav-links { top: 64px; padding: 0.8rem 1rem 1.2rem; align-items: stretch; }
+            .navbar .nav-links li { text-align: left; padding: 0.25rem 0; }
+            .navbar .nav-links a,
+            .navbar .nav-links .theme-toggle {
+                display: flex; align-items: center; justify-content: flex-start;
+                width: 100%; padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.95rem;
+            }
+            .navbar .nav-links .theme-toggle { height: auto; }
+            .navbar .nav-links .gh-btn {
+                justify-content: center; margin: 0.25rem 0 0.5rem;
+                padding: 0.7rem 1rem; border-radius: 8px;
+            }
+            .navbar .hamburger { display: flex; }
+        }
+
     </style>
 </head>
 <body>

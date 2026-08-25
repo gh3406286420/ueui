@@ -43,6 +43,35 @@
         .update-date{color:var(--text-muted);font-size:0.8rem;margin-bottom:2rem}
         @media(max-width:768px){.log-layout{flex-direction:column}.log-sidebar{position:static;width:100%}}
         .footer{text-align:center;padding:3rem 2rem;color:var(--text-muted);font-size:.85rem;border-top:1px solid var(--border);margin-top:3rem}
+        /* ===== 导航栏汉堡菜单（移动端） ===== */
+        .navbar .hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            background: none; border: none; cursor: pointer; padding: 4px;
+        }
+        .navbar .hamburger span {
+            width: 24px; height: 2px; background: var(--nav-text); border-radius: 2px;
+            transition: all 0.3s;
+        }
+        .navbar .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+        .navbar .hamburger.active span:nth-child(2) { opacity: 0; }
+        .navbar .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+        @media (max-width: 900px) {
+            .navbar { height: 64px; padding: 0 1rem; }
+            .navbar .nav-links { top: 64px; padding: 0.8rem 1rem 1.2rem; align-items: stretch; }
+            .navbar .nav-links li { text-align: left; padding: 0.25rem 0; }
+            .navbar .nav-links a,
+            .navbar .nav-links .theme-toggle {
+                display: flex; align-items: center; justify-content: flex-start;
+                width: 100%; padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.95rem;
+            }
+            .navbar .nav-links .theme-toggle { height: auto; }
+            .navbar .nav-links .gh-btn {
+                justify-content: center; margin: 0.25rem 0 0.5rem;
+                padding: 0.7rem 1rem; border-radius: 8px;
+            }
+            .navbar .hamburger { display: flex; }
+        }
+
     </style>
 </head>
 <body>

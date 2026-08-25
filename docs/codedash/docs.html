@@ -276,6 +276,24 @@
             }
         }
         .mobile-sidebar-toggle { display: none; }
+        /* === 移动端导航优化 === */
+        @media (max-width: 900px) {
+            .navbar { height: 64px; padding: 0 1rem; }
+            .navbar .nav-links { top: 64px; padding: 0.8rem 1rem 1.2rem; align-items: stretch; }
+            .navbar .nav-links li { text-align: left; padding: 0.25rem 0; }
+            .navbar .nav-links a,
+            .navbar .nav-links .theme-toggle {
+                display: flex; align-items: center; justify-content: flex-start;
+                width: 100%; padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.95rem;
+            }
+            .navbar .nav-links .theme-toggle { height: auto; }
+            .navbar .nav-links .gh-btn {
+                justify-content: center; margin: 0.25rem 0 0.5rem;
+                padding: 0.7rem 1rem; border-radius: 8px;
+            }
+            .navbar .hamburger { display: flex; }
+        }
+
     </style>
 </head>
 <body>
@@ -477,11 +495,9 @@
                 <section id="qs-install">
                     <h2>安装</h2>
                     <h3 id="qs-install-dl">下载与安装</h3>
-                    <p>从 CodeDash 官网下载对应平台的安装包：</p>
+                    <p>从 <a href="https://github.com/ueuiuiuu/ueui/releases/tag/v0.1.0" target="_blank" rel="noopener">GitHub Releases</a> 下载 Windows 安装包：</p>
                     <ul>
-                        <li><strong>macOS</strong>：下载 <code>.dmg</code> 文件，拖入 Applications</li>
                         <li><strong>Windows</strong>：下载 <code>.exe</code> 安装程序</li>
-                        <li><strong>Linux</strong>：下载 <code>.AppImage</code> 或 <code>.deb</code></li>
                     </ul>
                     <h3 id="qs-install-req">系统要求</h3>
                     <div class="highlight-box">

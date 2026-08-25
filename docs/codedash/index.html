@@ -837,6 +837,19 @@
                 <div id="bilibiliContainer" style="width:100%;height:100%;display:none;"></div>
             </div>
         </section>
+        <!-- === Video Showcase 2 === -->
+        <section class="video-section" id="videoShowcase2">
+            <div class="video-label">更多演示</div>
+            <div class="video-player" id="videoPlayer2">
+                <div class="video-overlay" id="videoOverlay2">
+                    <img src="icon-codedash.svg" alt="CodeDash" class="overlay-icon" id="overlayIcon2">
+                    <div class="play-icon-circle">&#9654;</div>
+                    <div class="overlay-text">点击播放视频介绍</div>
+                </div>
+                <div id="bilibiliContainer2" style="width:100%;height:100%;display:none;"></div>
+            </div>
+        </section>
+
         <section id="features">
             <h2 class="section-title">核心功能</h2>
             <div class="section-divider"></div>
@@ -1076,25 +1089,30 @@
             });
         });
 
-        // === Video Player ===
-        const videoPlayer = document.getElementById('videoPlayer');
-        const videoOverlay = document.getElementById('videoOverlay');
-        const bilibiliContainer = document.getElementById('bilibiliContainer');
-        let videoLoaded = false;
+        // === Video Players ===
+        function setupVideo(playerId, overlayId, containerId, bvid) {
+            const player = document.getElementById(playerId);
+            const overlay = document.getElementById(overlayId);
+            const container = document.getElementById(containerId);
+            let loaded = false;
 
-        videoPlayer.addEventListener('click', () => {
-            if (!videoLoaded) {
-                videoLoaded = true;
-                const iframe = document.createElement('iframe');
-                iframe.src = 'https://player.bilibili.com/player.html?bvid=BV1tjJp6bEvZ&autoplay=1&high_quality=1';
-                iframe.allow = 'autoplay; fullscreen';
-                iframe.allowFullscreen = true;
-                iframe.style.cssText = 'width:100%;height:100%;border:none;';
-                bilibiliContainer.appendChild(iframe);
-                bilibiliContainer.style.display = '';
-                videoOverlay.classList.add('hidden');
-            }
-        });
+            player.addEventListener('click', () => {
+                if (!loaded) {
+                    loaded = true;
+                    const iframe = document.createElement('iframe');
+                    iframe.src = 'https://player.bilibili.com/player.html?bvid=' + bvid + '&autoplay=1&high_quality=1';
+                    iframe.allow = 'autoplay; fullscreen';
+                    iframe.allowFullscreen = true;
+                    iframe.style.cssText = 'width:100%;height:100%;border:none;';
+                    container.appendChild(iframe);
+                    container.style.display = '';
+                    overlay.classList.add('hidden');
+                }
+            });
+        }
+
+        setupVideo('videoPlayer', 'videoOverlay', 'bilibiliContainer', 'BV1tjJp6bEvZ');
+        setupVideo('videoPlayer2', 'videoOverlay2', 'bilibiliContainer2', 'BV1CP3m6NEM9');
 
         console.log('CodeDash website loaded!');
     </script>
